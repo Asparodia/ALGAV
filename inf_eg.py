@@ -27,7 +27,11 @@ def inf(clef1, clef2):
             return False
 
 
-#Return false si faut mais ne retourne rien si vrai
+"""
+    inf : string * string -> Boolean
+    clef1 et clef2 sont des representation en hexadecimal d'un nombre codé sur 128 bits
+    fonction qui rend vrais quand clef1 et clef2 sont égale sinon false
+"""
 def eg(clef1, clef2):
     listeClef1 = []
     listeClef2 = []
@@ -48,6 +52,7 @@ def eg(clef1, clef2):
     
     return True
 
-
+#Pour faire des test avec inf et eg :
 a="0x9c1f03a0d9cf510f2765bd0f226ff5dc"
 b="0x10fd1015413104a2f26018d0ab77a727"
+    
