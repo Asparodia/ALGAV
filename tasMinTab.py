@@ -1,6 +1,4 @@
-from scipy import *
-a = array([1, 2, 3, 4, 5, 1j, 1+3j])
-
+import scipy
 
 #Tas min tableau
 class TasTab:
@@ -55,12 +53,42 @@ class TasTab:
                 self.tab = append(self.tab,copie[i])
                 i = i+1
             return res
+    
+    def ConsIter(self,liste):
+        
+        for x in liste:
+            self.Ajout(x)
+            
+    def Union(self,tas1,tas2):
+        #HYPOTHESE : les tas n'ont pas des éléments semblable
+        tailleTas1 = len(tas1.tab)
+        tailleTas2 = len(tas2.tab)
+        
+        res = arange(tailleTas1+tailleTas2)
+        
+        i=0
+        indTas1 = 0
+        indTas2 = 0
+        
+        while(indTas1 < tailleTas1):
+            res[i]=tas1.tab[indTas1]
+            i = i+ 1
+            indTas1 = indTas1 + 1
+            
+        while(indTas2 < tailleTas2):
+            res[i]=tas2.tab[indTas2]
+            indTas2 = indTas2 +1
+            i=i+1
+        
+        return self.ConsIter(res)
+        
+    
 
     def showMe(self):  
         for i in self.tab:
             print(i)
 
-        
+print("Test Ajout : tab1 = ")        
 tab = TasTab()
 tab.Ajout(5)
 tab.Ajout(10)
@@ -69,7 +97,18 @@ tab.Ajout(20)
 tab.Ajout(30)
 tab.Ajout(4)
 tab.showMe()
-"""print("Supp min : ")
-print(tab.SupprMin())
 print("\n")
-tab.showMe()"""
+print("Test Supp min : ")
+print( tab.SupprMin())
+print("\n")
+tab.showMe()
+print("\n")
+print("Test ConsIter : tab2 = ")
+tab2 = TasTab()
+tab2.ConsIter((1,9,14,7,19))
+tab2.showMe()
+print("\n")
+print("Test Union tab1 et tab2 dans tab3 : ")
+tab3 = TasTab()
+tab3.Union(tab,tab2)
+tab3.showMe()
