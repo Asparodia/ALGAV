@@ -6,11 +6,18 @@
 class Cle:
 
     def __init__(self,cleStr):
+        
+        self.name = cleStr
 
-        self.A=cleStr[2:10]
-        self.B=cleStr[10:18]
-        self.C=cleStr[18:26]
-        self.D=cleStr[26:24]
+        """self.A=int(cleStr[2:10],base=32)
+        self.B=int(cleStr[10:18],base=32)
+        self.C=int(cleStr[18:26],base=32)
+        self.D=int(cleStr[26:34],base=32)"""
+        
+        self.A= cleStr[2:10]
+        self.B= cleStr[10:18]
+        self.C= cleStr[18:26]
+        self.D= cleStr[26:34]
         
         self.listeCle = []
         self.listeCle.append(self.A)
@@ -41,64 +48,13 @@ class Cle:
                 return False
         return True
 
+	
+    def print(self):
+        print(self.A+self.B+self.C+self.D)
+        #print(self.name)
 
-#Pour faire des test avec inf et eg :
-a="0x9c1f03a0d9cf510f2765bd0f226ff5dc"
-b="0x10fd1015413104a2f26018d0ab77a727"
-c1=Cle(a)    
-c2=Cle(b)
+    def getKey(self):
+        #return "0x"+self.name[2:10]+self.name[10:18]+self.name[18:26]+self.name[26:34]
+        return self.name[2:10]+self.name[10:18]+self.name[18:26]+self.name[26:34]
+	
 
-print(c2.inf(c1))
-print(c2.eg(c2))
-
-
-""" AVANT :
-    
-    inf : string * string -> Boolean
-    clef1 et clef2 sont des representation en hexadecimal d'un nombre codé sur 128 bits
-    fonction qui determine si clef1 est strictement plus petite que clef 2
-
-def inf(clef1, clef2):
-    listeClef1 = []
-    listeClef2 = []
-    listeClef1.append(clef1[2:10])
-    listeClef1.append(clef1[10:18])
-    listeClef1.append(clef1[18:26])
-    listeClef1.append(clef1[26:34])
-
-    listeClef2.append(clef2[2:10])
-    listeClef2.append(clef2[10:18])
-    listeClef2.append(clef2[18:26])
-    listeClef2.append(clef2[26:34])
-    for i in range(3, 0, -1):
-        if listeClef1[i] < listeClef2[i]:
-            return True
-        elif listeClef1[i] > listeClef2[i]:
-            return False
-
-
-
-    inf : string * string -> Boolean
-    clef1 et clef2 sont des representation en hexadecimal d'un nombre codé sur 128 bits
-    fonction qui rend vrais quand clef1 et clef2 sont égale sinon false
-    
-def eg(clef1, clef2):
-    listeClef1 = []
-    listeClef2 = []
-    listeClef1.append(clef1[2:10])
-    listeClef1.append(clef1[10:18])
-    listeClef1.append(clef1[18:26])
-    listeClef1.append(clef1[26:34])
-
-    listeClef2.append(clef2[2:10])
-    listeClef2.append(clef2[10:18])
-    listeClef2.append(clef2[18:26])
-    listeClef2.append(clef2[26:34])
-    for i in range(3, 0, -1):
-        if listeClef1[i] < listeClef2[i]:
-            return False
-        elif listeClef1[i] > listeClef2[i]:
-            return False
-    
-    return True
-"""

@@ -1,4 +1,7 @@
-import scipy
+from scipy import arange,append,array
+import cle
+
+
 
 #Tas min tableau
 class TasTab:
@@ -7,9 +10,8 @@ class TasTab:
 
         self.tab = arange(0)
         
-            
-
     def Ajout(self, data):
+        
         if(len(self.tab) == 0):
             self.tab = append(self.tab,data)
         else:
@@ -19,7 +21,7 @@ class TasTab:
             if(pere<0):
                 pere = 0
             
-            while(self.tab[i] < self.tab[pere] ):
+            while(self.tab[i].inf(self.tab[pere]) ):
                 
                 tmp = self.tab[pere]
                 self.tab[pere] = self.tab[i]
@@ -28,11 +30,12 @@ class TasTab:
                 pere = (i-1)//2
                 if(pere<0):
                     pere = 0
+                
     def SupprMin(self):
         
         if(len(self.tab) == 0):
             print("nothing in this heap")
-            return null
+            return None
         if(len(self.tab)==1):
             res = self.tab[0]
             self.tab = arange(0)
@@ -46,8 +49,16 @@ class TasTab:
             copie = self.tab
             taille = len(self.tab)
             self.tab = arange(0)
-            self.tab = append(self.tab,min(copie[1],copie[2]))
-            self.tab = append(self.tab,max(copie[1],copie[2]))
+            
+            if(copie[1].inf(copie[2])):
+                mini = copie[1]
+                maxi = copie[2]
+            else:
+                mini = copie[2]
+                maxi = copie[1]
+            
+            self.tab = append(self.tab,mini)
+            self.tab = append(self.tab,maxi)
             i =3
             while (i < taille-1):
                 self.tab = append(self.tab,copie[i])
@@ -61,22 +72,21 @@ class TasTab:
             
     def Union(self,tas1,tas2):
         #HYPOTHESE : les tas n'ont pas des éléments semblable
+        
         tailleTas1 = len(tas1.tab)
         tailleTas2 = len(tas2.tab)
-        
-        res = arange(tailleTas1+tailleTas2)
-        
+        res = list()
         i=0
         indTas1 = 0
         indTas2 = 0
         
         while(indTas1 < tailleTas1):
-            res[i]=tas1.tab[indTas1]
+            res.append((tas1.tab[indTas1]))
             i = i+ 1
             indTas1 = indTas1 + 1
             
         while(indTas2 < tailleTas2):
-            res[i]=tas2.tab[indTas2]
+            res.append((tas2.tab[indTas2]))
             indTas2 = indTas2 +1
             i=i+1
         
@@ -86,29 +96,49 @@ class TasTab:
 
     def showMe(self):  
         for i in self.tab:
-            print(i)
+            i.print()
 
-print("Test Ajout : tab1 = ")        
-tab = TasTab()
-tab.Ajout(5)
-tab.Ajout(10)
-tab.Ajout(15)
-tab.Ajout(20)
-tab.Ajout(30)
-tab.Ajout(4)
-tab.showMe()
-print("\n")
-print("Test Supp min : ")
-print( tab.SupprMin())
-print("\n")
-tab.showMe()
-print("\n")
-print("Test ConsIter : tab2 = ")
-tab2 = TasTab()
-tab2.ConsIter((1,9,14,7,19))
-tab2.showMe()
-print("\n")
-print("Test Union tab1 et tab2 dans tab3 : ")
-tab3 = TasTab()
-tab3.Union(tab,tab2)
-tab3.showMe()
+
+a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
+b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
+c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
+d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
+e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
+f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
+print("     Test Ajout : tabTest  ")  
+tabTest = TasTab()
+tabTest.Ajout(f)
+tabTest.Ajout(b)
+tabTest.Ajout(c)
+tabTest.Ajout(d)
+tabTest.Ajout(a)
+tabTest.Ajout(e)
+tabTest.showMe()
+print("========================================")
+print("     Test SuppMin sur tabTest :   ")  
+print("min = : "+(tabTest.SupprMin().getKey()))
+print("     tabTest apres suppression : " )
+tabTest.showMe()
+print("========================================")
+print("     Test ConsIter : tabTestConstIter :   ") 
+L = [a,b,c,d,e,f]
+tabTestConstIter = TasTab()
+tabTestConstIter.ConsIter(L)
+tabTestConstIter.showMe()
+print("========================================")
+print("     Test Union :    ") 
+L1 = [a,b,c]
+L2 = [d,e,f]
+tas1 = TasTab()
+tas1.ConsIter(L1)
+tas2 = TasTab()
+tas2.ConsIter(L2)
+print(" Tas1 : ")
+tas1.showMe()
+print(" Tas2 : ")
+tas2.showMe()
+print(" TAS UNION : ")
+tas3 = TasTab()
+tas3.Union(tas1,tas2)
+tas3.showMe()
+print("========================================")
