@@ -21,8 +21,7 @@ class TasTab:
             if(pere<0):
                 pere = 0
             
-            while(self.tab[i].inf(self.tab[pere]) ):
-                
+            while( (self.tab[i].inf(self.tab[pere]))):
                 tmp = self.tab[pere]
                 self.tab[pere] = self.tab[i]
                 self.tab[i] = tmp
@@ -65,40 +64,52 @@ class TasTab:
                 i = i+1
             return res
     
+    def getMin(self):
+        if(len(self.tab) == 0):
+            print("nothing in this heap")
+            return None
+        else:
+            res = self.tab[0]
+            return res
+    
     def ConsIter(self,liste):
         
         for x in liste:
             self.Ajout(x)
             
-    def Union(self,tas1,tas2):
+    def Union(self,tas2):
         #HYPOTHESE : les tas n'ont pas des éléments semblable
         
-        tailleTas1 = len(tas1.tab)
+        tailleTas1 = len(self.tab)
         tailleTas2 = len(tas2.tab)
-        res = list()
-        i=0
         indTas1 = 0
         indTas2 = 0
         
-        while(indTas1 < tailleTas1):
-            res.append((tas1.tab[indTas1]))
-            i = i+ 1
-            indTas1 = indTas1 + 1
+        
+        if(self.getMin().inf(tas2.getMin())):
             
-        while(indTas2 < tailleTas2):
-            res.append((tas2.tab[indTas2]))
-            indTas2 = indTas2 +1
-            i=i+1
+            while(indTas2 < tailleTas2):
+                add = (tas2.tab[indTas2])
+                indTas2 = indTas2 + 1
+                self.Ajout(add)
+            return self
+        else:
+            while(indTas1 < tailleTas1):
+                add = (self.tab[indTas1])
+                tas2.Ajout(add)
+                indTas1 = indTas1 + 1
+            return tas2
         
-        return self.ConsIter(res)
         
-    
+            
 
     def showMe(self):  
         for i in self.tab:
             i.print()
 
 
+
+"""
 a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
 b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
 c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
@@ -137,8 +148,7 @@ print(" Tas1 : ")
 tas1.showMe()
 print(" Tas2 : ")
 tas2.showMe()
-print(" TAS UNION : ")
-tas3 = TasTab()
-tas3.Union(tas1,tas2)
-tas3.showMe()
-print("========================================")
+print(" TAS UNION :")
+(tas1.Union(tas2)).showMe()
+
+print("========================================")"""
