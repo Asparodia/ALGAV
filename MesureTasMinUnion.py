@@ -1,62 +1,53 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 #pip install -U memory_profiler
-
+ 
 import tasMinTab
 import time
 import cle
 import os
 import csv
-
+ 
 def mesureTemps(fun,param1):
     start = time.time()
     fun(param1)
     end = time.time()
     return (end-start)
-
-def mesure(fun,file):
-    param = list()
-    f= open(file,'r')
-    for line in f:
-        param.append(cle.Cle(line))
-    time = 0
-    for i in range(0,len(param)):
-        tmp = tasMinTab.TasTab()
-        tmp.Ajout(param[i])
-        time = time + mesureTemps(fun,tmp)
+ 
+def mesureUnion(allFiles):
+    allFiles.sort()
+    
+    res = list()
+    
+    for x in allFiles:
+        j = 0 
+        time = 0
+        param = list()
+        print(x)
+        f = open("cles_alea/"+x,'r')
+        for line in f:
+            param.append(cle.Cle(line))
+            
+        a = tasMinTab.TasTab()
+        a.Ajout(param[0])
+        #Initialisation du tas a unir (temps negligeable)
         
-    return time
-        
+        for i in range(1,len(param)):
+            b = tasMinTab.TasTab()
+            b.Ajout(param[i])  #Initialisation (temps negligeable)
+            
+            time = time + mesureTemps(a.Union,b)
 
-a=tasMinTab.TasTab()
-a.Ajout(cle.Cle("0x00000000000000000000000000000000"))
-print(mesure(a.Union,"cles_alea/jeu_1_nb_cles_100.txt"))
+        j = j + 1
+        res.append((j,x,time))
+        param = list()
+    return res
+       
 
-
-
-allFiles = os.listdir("cles_alea")
-allFiles.sort()
-
-Res = list()
-
-i = 0
-for x in allFiles:
-    a=tasMinTab.TasTab()
-    a.Ajout(cle.Cle("0x00000000000000000000000000000000"))
-    Res.append((i,mesure(a.Union,"cles_alea/"+x),x))
-    i = i+1
+allFiles = os.listdir("cles_alea")  
+       
+Res = mesureUnion(allFiles[0:9])
 
 csvfileTime = "Uniontime.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
-
-total = 0
-for x in Res:
-    total = total + x[1]
-print("total time Union pour nos ficher = "+str(total))
