@@ -6,15 +6,15 @@ import cle
 import os
 import csv
  
-def mesureTemps(fun,param1):
+def mesureTemps(a,b,c):
+    c = tasMinTab.TasTab()
     start = time.time()
-    fun(param1)
+    c = a.Union(b)
     end = time.time()
-    return (end-start)
+    return (c,(end-start))
  
 def mesureUnion(allFiles):
     allFiles.sort()
-    
     res = list()
     
     for x in allFiles:
@@ -33,9 +33,10 @@ def mesureUnion(allFiles):
         for i in range(1,len(param)):
             b = tasMinTab.TasTab()
             b.Ajout(param[i])  #Initialisation (temps negligeable)
+            (tasRes,tps) = mesureTemps(a,b,c)
+            time = time + tps
+            a = tasRes
             
-            time = time + mesureTemps(a.Union,b)
-
         j = j + 1
         res.append((j,x,time))
         param = list()
@@ -44,10 +45,16 @@ def mesureUnion(allFiles):
 
 allFiles = os.listdir("cles_alea")  
        
-Res = mesureUnion(allFiles[0:9])
+Res = mesureUnion(allFiles)
 
 csvfileTime = "Uniontime.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
+
+
+total = 0
+for f in Res:
+    total = total + f[2]
+print(str(total))

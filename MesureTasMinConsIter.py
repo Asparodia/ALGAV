@@ -47,3 +47,8 @@ with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
+
+total = 0
+for f in Res:
+    total = total + f[2]
+print(str(total))
