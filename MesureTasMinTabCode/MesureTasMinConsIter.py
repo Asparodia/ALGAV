@@ -3,15 +3,15 @@
 
 #pip install -U memory_profiler
 
-import tasMinTab
+import TasMinTabCle
 import time
 import cle
 import os
 import csv
 
-def mesureTemps(fun,param1):
+def mesureTemps(fun,param):
     start = time.time()
-    fun(param1)
+    fun(param)
     end = time.time()
     return (end-start)
 
@@ -19,17 +19,16 @@ def mesureConsIter(allFiles):
     allFiles.sort()
     
     res = list()
-    
+    j = 0 
     for x in allFiles:
-        j = 0 
+        
         time = 0
         param = list()
-        print(x)
         f = open("cles_alea/"+x,'r')
         for line in f:
             param.append(cle.Cle(line))
             
-        a = tasMinTab.TasTab()
+        a = TasMinTabCle.TasMinTab()
         time = time + mesureTemps(a.ConsIter,param)
 
         j = j + 1
