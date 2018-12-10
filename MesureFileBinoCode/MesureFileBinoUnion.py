@@ -1,18 +1,18 @@
 #pip install -U memory_profiler
  
-import TasMinTabCle
+import FileBinomiale
 import time
 import cle
 import os
 import csv
  
 def mesureTemps(a,b):
-    
+    c = FileBinomiale.FileBinomial()
     start = time.time()
-    a.Union(b)
+    c = FileBinomiale.UnionFile(a,b)
     end = time.time()
     
-    return (a,(end-start))
+    return (c,(end-start))
  
 def mesureUnion(allFiles):
     allFiles.sort()
@@ -22,19 +22,22 @@ def mesureUnion(allFiles):
          
         time = 0
         param = list()
+        tourn = list()
         f = open("cles_alea/"+x,'r')
         for line in f:
             param.append(cle.Cle(line))
-            
-        a = TasMinTabCle.TasMinTab()
-        a.Ajout(param[0])
+        for c in param:
+            tourn.append(FileBinomiale.TournoisBino(c))
         
-        for i in range(1,len(param)):
-            b = TasMinTabCle.TasMinTab()
-            b.Ajout(param[i])  #Initialisation (temps negligeable)
-            (tasRes,tps) = mesureTemps(a,b)
+        f = FileBinomiale.FileBinomial()
+        f.AjoutTournois(tourn[0])
+        
+        for i in range(1,len(tourn)):
+            b = FileBinomiale.FileBinomial()
+            b.AjoutTournois(tourn[i])  #Initialisation (temps negligeable)
+            (tasRes,tps) = mesureTemps(f,b)
             time = time + tps
-            a = tasRes
+            f = tasRes
             
         j = j + 1
         res.append((j,x,time))
@@ -46,7 +49,7 @@ allFiles = os.listdir("cles_alea")
        
 Res = mesureUnion(allFiles)
 
-csvfileTime = "Uniontime.csv"
+csvfileTime = "FileBinoUniontime.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)

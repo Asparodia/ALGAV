@@ -4,9 +4,8 @@ class TournoisBino:
     
     def __init__(self,root):
         self.racine = root
-        self.enfants = [] #chaque enfant est un tournois de degree plus petit que le tournois actel
+        self.enfants = [] #chaque enfant est un tournois de degre plus petit que le tournoi actuel
         self.degre = 0
-        #☺self.ind = 0
     
     def decapite(self):
         res = self.racine
@@ -160,28 +159,50 @@ def Union(F1,F2,t):
         if(t.degre < t1.degre and t.degre==t2.degre):
             return Union(F2.reste(),F1,union2Tid(t,t2))
     
+def main():        
+    l = list()
+    a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
+    b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
+    c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
+    d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
+    e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
+    f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
+    t1 = TournoisBino(a)
+    t2 = TournoisBino(b)
+    t3 = TournoisBino(c)
+    t4 = TournoisBino(d)
+    t5 = TournoisBino(e)
+    t6 = TournoisBino(f)
+    l.extend([t1,t2,t3,t4,t5,t6])
+    F = FileBinomial()
+    F.ConsIter(l)
+    print(F)
+    for c in F.tournois:
+        print(c)
         
-l = list()
-a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
-b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
-c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
-d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
-e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
-f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
-t1 = TournoisBino(a)
-t2 = TournoisBino(b)
-t3 = TournoisBino(c)
-t4 = TournoisBino(d)
-t5 = TournoisBino(e)
-t6 = TournoisBino(f)
-l.extend([t1,t2,t3,t4,t5,t6])
-F = FileBinomial()
-F.ConsIter(l)
-print(F)
-for c in F.tournois:
-    print(c)
-    
-print(F.SuppMin())
-print(F)
-for c in F.tournois:
-    print(c)
+    print(F.SuppMin())
+    print(F)
+    for c in F.tournois:
+        print(c)
+        
+    a=cle.Cle("0x9a5cdb45f1951a3a82b09af737fdc9aa")
+    b=cle.Cle("0x53f7ffe901f3686b875af337039ee262")
+    c=cle.Cle("0xa89aa39aa55e5bb5fb33a1802b248207")
+    d=cle.Cle("0x8aefe5f306ac962bcbdb63aeb58d1e35")
+    e=cle.Cle("0x85c3d80bfe89b91033b23cd659cddb08")
+    f=cle.Cle("0x45484c820aee4c04ef89c1db9bb3eaf5")
+    t1 = TournoisBino(a)
+    t2 = TournoisBino(b)
+    t3 = TournoisBino(c)
+    t4 = TournoisBino(d)
+    t5 = TournoisBino(e)
+    t6 = TournoisBino(f)
+    l = list()
+    l.extend([t1,t2,t3,t4,t5,t6])
+    F2 = FileBinomial()
+    F2.ConsIter(l)
+    F3 = UnionFile(F,F2)
+    print(F3)
+
+#if __name__ == "__main__":
+#    main()

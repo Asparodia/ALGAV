@@ -1,42 +1,42 @@
 #pip install -U memory_profiler
  
-import TasMinTabCle
+import tasMinArbre
 import time
 import cle
 import os
 import csv
  
-def mesureTemps(a,b):
+def mesureTemps(fun,a,b):
     
     start = time.time()
-    a.Union(b)
+    c = fun(a,b)
     end = time.time()
     
-    return (a,(end-start))
+    return (c,(end-start))
  
 def mesureUnion(allFiles):
     allFiles.sort()
     res = list()
     j = 0
     for x in allFiles:
-         
+        print(x)
         time = 0
         param = list()
         f = open("cles_alea/"+x,'r')
         for line in f:
             param.append(cle.Cle(line))
             
-        a = TasMinTabCle.TasMinTab()
-        a.Ajout(param[0])
+        a = tasMinArbre.TasMinArbre(param[0])
         
         for i in range(1,len(param)):
-            b = TasMinTabCle.TasMinTab()
-            b.Ajout(param[i])  #Initialisation (temps negligeable)
-            (tasRes,tps) = mesureTemps(a,b)
+            b = tasMinArbre.TasMinArbre(param[i])
+            #Initialisation (temps negligeable)
+            (tasRes,tps) = mesureTemps(tasMinArbre.union,a,b)
             time = time + tps
             a = tasRes
             
         j = j + 1
+        print(j)
         res.append((j,x,time))
         param = list()
     return res

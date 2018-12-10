@@ -1,5 +1,4 @@
 import cle
-from memory_profiler import profile
 
 class TasMinTab():
     """La classe TasMinTab represente un tas min dont les donnÃ©es 
@@ -104,7 +103,6 @@ class TasMinTab():
 
 
    
-    @profile
     def ConsIter(self, vals):
         """
         Construit un tas qui aura pour valeurs les elements de la liste vals

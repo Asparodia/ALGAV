@@ -21,7 +21,7 @@ class TasMinTab():
 
     def getMin(self):
         if(self.estVide()):
-            return -1
+            return None
         return self.tas[1]
 
     def estVide(self):
@@ -149,7 +149,6 @@ class TasMinTab():
         return "Tas Binaire Tab : " + str(self.tas[1:])
 
 def main():
-    print("Demonstrating minHeap binary tree")
     a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
     b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
     c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
