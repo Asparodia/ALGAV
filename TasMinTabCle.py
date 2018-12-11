@@ -1,5 +1,4 @@
 import cle
-from memory_profiler import profile
 
 class TasMinTab():
     """La classe TasMinTab represente un tas min dont les donnÃ©es 
@@ -77,9 +76,9 @@ class TasMinTab():
 
     def Ajout(self,val):
         """Pour ajouter une valeur dans notre tas min nous allons l'ajouter a la fin de notre tableau puis nous allons la faire remonter
-        jusqu'Ã  ce qu'elle arrive a la bonne place (c'est a dire elle est superieur a la valeur de son pere si elle en a un 
+        jusqu'Ã  ce qu'elle arrive a la bonne place (c'est a dire elle est superieur a la valeur de son pere si elle en a un 
         et inferieur aux valeurs de ses fils si elle en a).
-        La methode remonte vas se charger de remonter la valeur val Ã  l'indice i si necessaire.
+        La methode remonte vas se charger de remonter la valeur val Ã  l'indice i si necessaire.
         """
         self.tas.append(val)
         self.tailleTas = self.tailleTas + 1
@@ -104,7 +103,6 @@ class TasMinTab():
 
 
    
-    @profile
     def ConsIter(self, vals):
         """
         Construit un tas qui aura pour valeurs les elements de la liste vals
@@ -196,5 +194,5 @@ def main():
     
 
 
-#if __name__ == "__main__":
-#    main()
+if __name__ == "__main__":
+    main()

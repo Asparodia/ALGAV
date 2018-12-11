@@ -30,7 +30,7 @@ class Cle:
     """    
     def inf(self, cle2):
         
-        for i in range(3, 0, -1):
+        for i in range(0,4):
             if self.listeCle[i] < cle2.listeCle[i]:
                 return True
             elif self.listeCle[i] > cle2.listeCle[i]:
@@ -38,7 +38,7 @@ class Cle:
     
     def sup(self, cle2):
         
-        for i in range(3, 0, -1):
+        for i in range(0,4):
             if self.listeCle[i] > cle2.listeCle[i]:
                 return True
             elif self.listeCle[i] < cle2.listeCle[i]:
@@ -49,7 +49,7 @@ class Cle:
     """ 
     def eg(self, cle2):
 
-        for i in range(3,0,-1):
+        for i in range(0,4):
             if self.listeCle[i]<cle2.listeCle[i]:
                 return False
             elif self.listeCle[i]>cle2.listeCle[i]:
