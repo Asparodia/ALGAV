@@ -1,6 +1,7 @@
 import cle
 
 class Noeud():
+    """ Represente un noeud de notre AVL (elle vas nous servir a contenir notre donnée qui vas etre nos clé)"""
     def __init__(self,key):
         self.key = key
         self.left = None

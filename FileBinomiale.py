@@ -1,7 +1,7 @@
 import cle
 
 class TournoisBino:
-    
+    """ Classe representant un tournois binomial, elle vas etre utiliser pour representer notre file binomiale comme une liste de tournois binomiaux"""
     def __init__(self,root):
         self.racine = root
         self.enfants = [] #chaque enfant est un tournois de degre plus petit que le tournoi actuel
@@ -23,6 +23,7 @@ class TournoisBino:
         return False
     
     def file(self):
+        """ transforme un tournois en file binomial qui a pour unique tournois ce tournois"""
         res = FileBinomial()
         res.AjoutTournois(self)
         return res
@@ -35,6 +36,7 @@ class TournoisBino:
 
     
 class FileBinomial:
+    """ Une file Binomiale est une liste de tournois"""
     def __init__(self):
         self.tournois = []
         
@@ -44,20 +46,22 @@ class FileBinomial:
         return False
     
     def minDegre(self):
+        """ renvoie le tournois de degre minimum"""
         if(self.estVide()):
             return None
         self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
         return self.tournois[0]
     
     def reste(self):
+        """renvoie la file privé de son tournois de degree minimum"""
         if(self.estVide()):
-            
             return None
         self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
         self.tournois.pop(0)
         return self
     
     def SuppMin(self):
+        """ renvoie le tournois avec la racine la plus petite et le supprime de la file"""
         if self.tournois == []:
             return None
         
@@ -74,6 +78,7 @@ class FileBinomial:
 
 
     def AjoutTournois(self, t):
+        """ Ajoute un tournois dans la file"""
         if(self.tournois == []):
             self.tournois.append(t)
         else:
@@ -84,6 +89,7 @@ class FileBinomial:
             
             
     def ConsIter(self,tournois):
+        """Construit une file a partir d'une liste de tournois"""
         for t in tournois:
             self.AjoutTournois(t)
         
@@ -95,32 +101,36 @@ class FileBinomial:
         return res
         
 def union2Tid(t1,t2):
-        if(t1.estVide() or t2.estVide()):
-            return None
-        rac1 = t1.racine
-        rac2 = t2.racine
-        if(rac1.inf(rac2)):
-            t1.enfants.append(t2)
-            t1.racine = rac1
-            t1.degre = t1.degre + 1
-            return t1
-        else:
-            t2.enfants.append(t1)
-            t2.racine = rac2
-            t2.degre = t1.degre + 1
-            return t2
+    """ Renvoie l'union entre deux tournois de meme taille"""
+    if(t1.estVide() or t2.estVide()):
+        return None
+    rac1 = t1.racine
+    rac2 = t2.racine
+    if(rac1.inf(rac2)):
+        t1.enfants.append(t2)
+        t1.racine = rac1
+        t1.degre = t1.degre + 1
+        return t1
+    else:
+        t2.enfants.append(t1)
+        t2.racine = rac2
+        t2.degre = t1.degre + 1
+        return t2
 
 def UnionFile(F1,F2):
-        t = TournoisBino(None)
-        return Union(F1,F2,t)
+    """ renvoie l'union entre deux file Binomial"""
+    t = TournoisBino(None)
+    return Union(F1,F2,t)
 
 def ajoutMin(F,tournoi):
-        if(F.minDegre().degre<tournoi.degre):
-            return None
-        F.tournois.insert(0,tournoi)
-        return F
+    """ ajoute un tournois de degre plus petit que le tournois de degre plus petit d'une file dans une file"""
+    if(F.minDegre().degre<tournoi.degre):
+        return None
+    F.tournois.insert(0,tournoi)
+    return F
         
 def Union(F1,F2,t):
+    """fait l'addition binaire avec une retenue (ici t) pour l'union de deux file binomiale"""
         
     if(t.estVide()):
         
