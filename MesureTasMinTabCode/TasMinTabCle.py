@@ -39,7 +39,6 @@ class TasMinTab():
         return res
 
     def remonte(self, ind):
-        print("ixi")
         """
         Regarde si la valeur a l'indice ind est plus petite que son pere si oui elle echange les deux valeurs de place
         tant qu'elle peut faire remontrer cette valeur elle continue.

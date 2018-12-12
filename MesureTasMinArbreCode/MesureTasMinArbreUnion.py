@@ -19,7 +19,6 @@ def mesureUnion(allFiles):
     res = list()
     j = 0
     for x in allFiles:
-        print(x)
         time = 0
         param = list()
         f = open("cles_alea/"+x,'r')
@@ -35,7 +34,6 @@ def mesureUnion(allFiles):
             a = tasRes
             
         j = j + 1
-        print(j)
         res.append((j,x,time))
         param = list()
     return res

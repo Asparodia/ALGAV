@@ -6,14 +6,19 @@ class TasMinArbre:
     sont stocker dans un arbre binaire.
     """
     def __init__(self, data):
+
         self.left = None
         self.right = None
+        
         if data is None :
             self.data = None
+            self.nbNoeud = 0
         else :
             self.data = data
+            self.nbNoeud = 1
 
     def NbNoeud(self):
+                
         """renvoie le nombre de noeud qu'à le sous arbre enraciné en ce noeud"""
         if self.right is None and self.left is None :
             return 1
@@ -26,55 +31,31 @@ class TasMinArbre:
 
     def Ajout(self, data):
         """Ajoute l'élement data dans un arbre"""
-        print("izi")
         if self.data is not None:
             if self.data.inf(data) :
                 if self.left is None :
                     self.left = TasMinArbre(data)
+                    self.left.nbNoeud = self.left.nbNoeud + 1
                     return True
                 if self.right is None:
                     self.right = TasMinArbre(data)
+                    self.right.nbNoeud = self.right.nbNoeud + 1
                     return True
-                if self.left.NbNoeud() >= self.right.NbNoeud():
+                if self.left.nbNoeud >= self.right.nbNoeud:
                     self.right.Ajout(data)
                     return True
-                if self.left.NbNoeud() < self.right.NbNoeud():
+                if self.left.nbNoeud < self.right.nbNoeud:
                     self.left.Ajout(data)
                     return True
             else :
                 valeur = self.data
                 self.data = data
+                self.nbNoeud = self.nbNoeud + 1
                 self.Ajout(valeur)
                 return True
 
         else:
             self.data = TasMinArbre(data)
-            return True
-
-
-    def ajoutNode(self,data):
-        """Ajoute un node"""
-        if self.data is not None :
-            if self.data.inf(data.data):
-                if self.left is None:
-                    self.left = data
-                    return True
-                if self.right is None:
-                    self.right = data
-                    return True
-                if self.left.NbNoeud() >= self.right.NbNoeud():
-                    self.right.ajoutNode(data)
-                    return True
-                if self.left.NbNoeud() < self.right.NbNoeud():
-                    self.left.ajoutNode(data)
-                    return True
-            else:
-                valeur = self
-                self = data
-                self.ajoutNode(valeur)
-                return True
-        else :
-            self = data
             return True
 
 

@@ -9,10 +9,13 @@ class TasMinArbre:
 
         self.left = None
         self.right = None
+        
         if data is None :
             self.data = None
+            self.nbNoeud = 0
         else :
             self.data = data
+            self.nbNoeud = 1
 
     def NbNoeud(self):
                 
@@ -32,19 +35,22 @@ class TasMinArbre:
             if self.data.inf(data) :
                 if self.left is None :
                     self.left = TasMinArbre(data)
+                    self.left.nbNoeud = self.left.nbNoeud + 1
                     return True
                 if self.right is None:
                     self.right = TasMinArbre(data)
+                    self.right.nbNoeud = self.right.nbNoeud + 1
                     return True
-                if self.left.NbNoeud() >= self.right.NbNoeud():
+                if self.left.nbNoeud >= self.right.nbNoeud:
                     self.right.Ajout(data)
                     return True
-                if self.left.NbNoeud() < self.right.NbNoeud():
+                if self.left.nbNoeud < self.right.nbNoeud:
                     self.left.Ajout(data)
                     return True
             else :
                 valeur = self.data
                 self.data = data
+                self.nbNoeud = self.nbNoeud + 1
                 self.Ajout(valeur)
                 return True
 
@@ -63,10 +69,10 @@ class TasMinArbre:
                 if self.right is None:
                     self.right = data
                     return True
-                if self.left.NbNoeud() >= self.right.NbNoeud():
+                if self.left.nbNoeud >= self.right.nbNoeud:
                     self.right.ajoutNode(data)
                     return True
-                if self.left.NbNoeud() < self.right.NbNoeud():
+                if self.left.nbNoeud < self.right.nbNoeu:
                     self.left.ajoutNode(data)
                     return True
             else:
