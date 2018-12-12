@@ -36,7 +36,7 @@ def mesureUnion(allFiles):
             b = FileBinomiale.FileBinomial()
             b.AjoutTournois(tourn[i])  #Initialisation (temps negligeable)
             (tasRes,tps) = mesureTemps(f,b)
-            time = time + tps
+            time = time + (tps*(10**3))
             f = tasRes
             
         j = j + 1
@@ -51,7 +51,7 @@ Res = mesureUnion(allFiles)
 total = 0
 for f in Res:
     total = total + f[2]
-Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
+Res.append((-1,"total du temps en miliseconde pour tout les fichiers : ",total))
 
 csvfileTime = "timeFileBinoUnion.csv"
 with open(csvfileTime,"w") as output:

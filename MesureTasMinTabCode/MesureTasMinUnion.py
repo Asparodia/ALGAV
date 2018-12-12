@@ -31,7 +31,7 @@ def mesureUnion(allFiles):
             b = TasMinTabCle.TasMinTab()
             b.Ajout(param[i])  #Initialisation (temps negligeable)
             (tasRes,tps) = mesureTemps(a,b)
-            time = time + tps
+            time = time + (tps*(10**3))
             a = tasRes
             
         j = j + 1
@@ -46,7 +46,7 @@ Res = mesureUnion(allFiles)
 total = 0
 for f in Res:
     total = total + f[2]
-Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
+Res.append((-1,"total du temps en miliseconde pour tout les fichiers : ",total))
 csvfileTime = "timeTasMinTabUnion.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')

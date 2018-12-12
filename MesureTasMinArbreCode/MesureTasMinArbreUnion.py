@@ -30,7 +30,7 @@ def mesureUnion(allFiles):
         for i in range(1,len(param)):
             b = tasMinArbre.TasMinArbre(param[i])
             (tasRes,tps) = mesureTemps(tasMinArbre.union,a,b)
-            time = time + tps
+            time = time + (tps*(10**3))
             a = tasRes
             
         j = j + 1
@@ -45,7 +45,7 @@ Res = mesureUnion(allFiles)
 total = 0
 for f in Res:
     total = total + f[2]
-Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
+Res.append((-1,"total du temps en miliseconde pour tout les fichiers : ",total))
 
 csvfileTime = "timeTasMinArbreUnion.csv"
 with open(csvfileTime,"w") as output:

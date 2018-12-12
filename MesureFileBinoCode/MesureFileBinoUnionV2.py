@@ -39,23 +39,22 @@ def mesureUnion(allFiles):
         jeuName = name[:5]
         numName = name[13:]
         (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu2[i][1])
-        tps = tps + t
-        
+        tps = tps + (t*(10**6))
         res.append( (j,"union "+str(jeuName+numName)+ " et "+ str(tasJeu2[i][0][:5]+tasJeu2[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         (tasRes2,t) = mesureTemps(tasRes,tasJeu3[i][1])
-        tps = tps + t
+        tps = tps + (t*(10**6))
         res.append( (j,"union "+str(jeuName+numName+'\'')+ " et "+ str(tasJeu3[i][0][:5]+tasJeu3[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         (tasRes3,t) = mesureTemps(tasRes2,tasJeu4[i][1])
-        tps = tps + t
+        tps = tps + (t*(10**6))
         res.append( (j,"union "+str(jeuName+numName+'\'\'')+ " et "+ str(tasJeu4[i][0][:5]+tasJeu4[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         (tasRes4,t) = mesureTemps(tasRes3,tasJeu5[i][1])
-        tps = tps + t
+        tps = tps + (t*(10**6))
         res.append( (j,"union "+str(jeuName+numName+'\'\'\'')+ " et "+ str(tasJeu5[i][0][:5]+tasJeu5[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
@@ -70,7 +69,7 @@ Res = mesureUnion(allFiles)
 total = 0
 for f in Res:
     total = total + f[2]
-Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
+Res.append((-1,"total du temps en microseconde pour tout les fichiers : ",total))
 
 csvfileTime = "timeFileBinoUnionV2.csv"
 with open(csvfileTime,"w") as output:

@@ -24,7 +24,7 @@ def mesureConsIter(allFiles):
         for line in f:
             param.append(cle.Cle(line))
             
-        time = time + mesureTemps(tasMinArbre.consIter,param)
+        time = time + (mesureTemps(tasMinArbre.consIter,param)*(10**3))
         j = j + 1
         res.append((j,x,time))
         param = list()
