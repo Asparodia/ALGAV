@@ -37,42 +37,43 @@ def mesureUnion(allFiles):
     res = list()
     
     for i in range(0,len(tasJeu1)):
+        name = tasJeu1[i][0]
+        jeuName = name[:5]
+        numName = name[13:]
         (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu2[i][1])
         tps = tps + t
-        res.append( (j,"union "+str(tasJeu1[i][0])+ " et "+ str(tasJeu2[i][0]),tps) )
+        
+        
+        res.append( (j,"union : "+str(jeuName+numName)+ " et "+ str(tasJeu2[i][0][:5]+tasJeu2[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu3[i][1])
         tps = tps + t
-        res.append( (j,"union "+str(tasJeu1[i][0])+ " et "+ str(tasJeu3[i][0]),tps) )
+        res.append( (j,"union : "+str(jeuName+numName)+ " et "+ str(tasJeu3[i][0][:5]+tasJeu3[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu4[i][1])
         tps = tps + t
-        res.append( (j,"union "+str(tasJeu1[i][0])+ " et "+ str(tasJeu4[i][0]),tps) )
+        res.append( (j,"union : "+str(jeuName+numName)+ " et "+ str(tasJeu4[i][0][:5]+tasJeu4[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu5[i][1])
         tps = tps + t
-        res.append( (j,"union "+str(tasJeu1[i][0])+ " et "+ str(tasJeu5[i][0]),tps) )
+        res.append( (j,"union : "+str(jeuName+numName)+ " et "+ str(tasJeu5[i][0][:5]+tasJeu5[i][0][13:]),tps) )
         tps = 0
         j = j+ 1
         
     return res
        
 
-allFiles = os.listdir("cles_alea")  
-       
+allFiles = os.listdir("cles_alea") 
 Res = mesureUnion(allFiles)
-
-csvfileTime = "Uniontime.csv"
+total = 0
+for f in Res:
+    total = total + f[2]
+Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
+csvfileTime = "timeTasMinTabUnionV2.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
-
-
-total = 0
-for f in Res:
-    total = total + f[2]
-print(str(total))

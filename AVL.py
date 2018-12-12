@@ -11,6 +11,9 @@ class Noeud():
         return str(self.key)
         
 class ArbreAVL:
+    """ la classe qui represene un arbre de recherche adapter pour avoir une recherche en O(logn), on a choisit un AVL
+    l'ajout est plus couteux mais la recher est au pire en log n """
+    
     def __init__(self):
         self.node = None
         self.hauteur = -1 #hauteur de l'arbre vide est -1
@@ -35,6 +38,7 @@ class ArbreAVL:
             self.ajout(add)
     
     def reEquilibrage(self):
+        """ Conserve l'equilibre de l'abre apres chaque ajout"""
         self.MAJ_hauteur(False)
         self.MAJ_equilibre(False)
         
@@ -74,6 +78,7 @@ class ArbreAVL:
         racine.right.node = fg
     
     def MAJ_hauteur(self, recursion = True):
+        """ outils pour la fonction de reequilibrage"""
         if(not self.node is None):
             if recursion:
                 if(self.node.left is not None):
@@ -86,6 +91,7 @@ class ArbreAVL:
             self.hauteur = -1
     
     def MAJ_equilibre(self,recursion=True):
+        """ outils pour la fonction de reequilibrage"""
         if(not self.node is None):
             if recursion:
                 if(self.node.left is not None):
@@ -97,7 +103,7 @@ class ArbreAVL:
             self.equilibre = 0
         
     def recherche(self,val):
-        
+        """ recherche une cle dans notre AVL"""
         nodeCourant = self.node
         
         

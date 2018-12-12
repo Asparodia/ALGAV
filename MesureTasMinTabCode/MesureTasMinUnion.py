@@ -7,11 +7,9 @@ import os
 import csv
  
 def mesureTemps(a,b):
-    
     start = time.time()
     a.Union(b)
     end = time.time()
-    
     return (a,(end-start))
  
 def mesureUnion(allFiles):
@@ -45,15 +43,12 @@ def mesureUnion(allFiles):
 allFiles = os.listdir("cles_alea")  
        
 Res = mesureUnion(allFiles)
-
-csvfileTime = "Uniontime.csv"
+total = 0
+for f in Res:
+    total = total + f[2]
+Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
+csvfileTime = "timeTasMinTabUnion.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
-
-
-total = 0
-for f in Res:
-    total = total + f[2]
-print(str(total))

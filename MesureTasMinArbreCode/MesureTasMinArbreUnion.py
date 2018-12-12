@@ -30,7 +30,6 @@ def mesureUnion(allFiles):
         
         for i in range(1,len(param)):
             b = tasMinArbre.TasMinArbre(param[i])
-            #Initialisation (temps negligeable)
             (tasRes,tps) = mesureTemps(tasMinArbre.union,a,b)
             time = time + tps
             a = tasRes
@@ -45,15 +44,14 @@ def mesureUnion(allFiles):
 allFiles = os.listdir("cles_alea")  
        
 Res = mesureUnion(allFiles)
+total = 0
+for f in Res:
+    total = total + f[2]
+Res.append((-1,"total du temps en seconde pour tout les fichiers : ",total))
 
-csvfileTime = "Uniontime.csv"
+csvfileTime = "timeTasMinArbreUnion.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
 
-
-total = 0
-for f in Res:
-    total = total + f[2]
-print(str(total))
