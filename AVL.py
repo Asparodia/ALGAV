@@ -1,156 +1,241 @@
 import cle
 
-class Noeud():
-    """ Represente un noeud de notre AVL (elle vas nous servir a contenir notre donnée qui vas etre nos clé)"""
-    def __init__(self,key):
-        self.key = key
+class Node(object):
+    """La classe qui represente les noeuds de notre AVL on a besoin du parent particulierement pour les rotations"""
+    def __init__(self, data):
+        self.data = data
+        self.hauteur = 0
+        self.parent = None
         self.left = None
         self.right = None
-    
+        
     def __repr__(self):
-        return str(self.key)
-        
-class ArbreAVL:
-    """ la classe qui represene un arbre de recherche adapter pour avoir une recherche en O(logn), on a choisit un AVL
-    l'ajout est plus couteux mais la recher est au pire en log n """
+        return str(data)
     
-    def __init__(self):
-        self.node = None
-        self.hauteur = -1 #hauteur de l'arbre vide est -1
-        self.equilibre = 0
+    def equilibre(self):
+        """ Methode qui nous dit de quelle coté l'arbre est déséquilibré ou si il est equilibré"""
+        return (self.left.hauteur if self.left else -1) - (self.right.hauteur if self.right else -1)
     
-    def ajout(self, val):
-        arbre = self.node
-        add = Noeud(val)
-        
-        if(arbre is None):
-            self.node = add
-            self.node.left = ArbreAVL()
-            self.node.right = ArbreAVL()
-        elif(add.key.inf(arbre.key)):
-            self.node.left.ajout(add.key)
-        elif(add.key.sup(arbre.key)):
-            self.node.right.ajout(add.key)
-        self.reEquilibrage()
+    def update_hauteur(self):
+        """ mets a jour la hauteur du noeud de maniere reccursive """
+        if not self.right and not self.left:
+            self.hauteur = 0
+        elif not self.right:
+            self.hauteur = (self.left.hauteur + 1)
+        elif not self.left:
+            self.hauteur = (self.right.hauteur + 1)
+        else:
+            self.hauteur = (max(self.left.hauteur, self.right.hauteur) + 1)
     
-    def consIter(self,liste):
-        for add in liste:
-            self.ajout(add)
+class AVL(object):
+    """ Classe qui vas representer notre AVL """
+    def __init__(self, iterable=None):
+        self.racine = None
+        if iterable:
+            for item in iterable:
+                self.ajout(item)
+
+    def __repr__(self):
+        return str(self.arbreBinareToTab())
     
-    def reEquilibrage(self):
-        """ Conserve l'equilibre de l'abre apres chaque ajout"""
-        self.MAJ_hauteur(False)
-        self.MAJ_equilibre(False)
-        
-        while (self.equilibre < -1 or self.equilibre > 1):
-            if(self.equilibre > 1):
-                if(self.node.left.equilibre < 0):
-                    self.node.left.rotationGauche()
-                    self.MAJ_hauteur()
-                    self.MAJ_equilibre()
-                self.rotationDroite()
-                self.MAJ_hauteur()
-                self.MAJ_equilibre()
-                
-                if(self.equilibre < -1):
-                    if(self.node.right.equilibre > 0):
-                        self.node.right.rotationDroite()
-                        self.MAJ_hauteur()
-                        self.MAJ_equilibre()
-                    self.rotationGauche()
-                    self.MAJ_hauteur()
-                    self.MAJ_equilibre()
-    
-    def rotationDroite(self):
-        racine = self.node
-        fg = self.node.left.node
-        fd = fg.right.node
-        self.node = fg
-        fg.right.node = racine
-        racine.left.node = fd
-        
-    def rotate_left(self):
-        racine = self.node
-        fd = self.node.right.node
-        fg = fd.left.node
-        self.node = fd
-        fd.left.node = racine
-        racine.right.node = fg
-    
-    def MAJ_hauteur(self, recursion = True):
-        """ outils pour la fonction de reequilibrage"""
-        if(not self.node is None):
-            if recursion:
-                if(self.node.left is not None):
-                    self.node.left.MAJ_hauteur()
-                if(self.node.right is not None):
-                    self.node.right.MAJ_hauteur()
-            self.hauteur = max(self.node.left.hauteur,self.node.right.hauteur)
+    def arbreBinareToTab(self):
+        """renvoie la representation sous forme de tableau de notre arbre"""
+        queue = list()
+        items = list()
+        if not self.estVide():
+            queue.append(self.racine)
+        while len(queue) > 0:
+            node = queue.pop(0)
+            items.append(node.data)
+            if node.left is not None:
+                queue.append(node.left)
+            if node.right is not None:
+                queue.append(node.right)
+        return items
+
+    def estVide(self):
+        """renvoie vrais si l'arbre est vide"""
+        return self.racine is None
+
+    def recherche(self, data):
+        """ recherche de façon itérative une cle dans notre AVL"""
+        courant = self.racine
+        while courant is not None:
+            if courant.data.eg(data):
+                return courant.data
+            elif courant.data.sup(data):
+                courant = courant.left
+                continue
+            elif courant.data.inf(data):
+                courant = courant.right
+                continue
+        print(str(data) + " n'a pas été trouver ")
+        return None
+
+    def ajout(self, data):
+        """ ajoute une cle (encapsuler dans la classe node definit plus haut) dans notre arbre """
+        n = Node(data)
+        if self.racine is None:
+            self.racine = n
+            return
+
+        courant = self.racine
+        while courant is not None:
+            if courant.data.eg(data):
+                print(" cette valeur est deja dans l'arbre""")
+                return None
+            elif courant.data.sup(data):
+                """ si data > valeur actuelle on l'ajoute a gauche du node qui contient la valeur actuelle"""
+                if not courant.left:
+                    courant.left = n
+                    n.parent = courant
+                    """mise a jour de la hauteur du parent et rotation si l'arbre est déséquilibré apres cet ajout"""
+                    self.reequilibre(n)
+                    return
+                else:
+                    """ si le fils gauche du noeud courant etait deja remplis on vas faire l'ajout en prenant ce fils comme noeud actuel dans une seconde itération"""
+                    courant = courant.left
+                    continue
+            elif courant.data.inf(data):
+                """ si data < valeur actuelle on l'ajoute a droite du node qui contient la valeur actuelle"""
+                if not courant.right:
+                    courant.right = n
+                    n.parent = courant
+                    """mise a jour de la hauteur du parent et rotation si l'arbre est déséquilibré apres cet ajout"""
+                    self.reequilibre(n)
+                    return
+                else:
+                    courant = courant.right
+                    continue
+
+    def reequilibre(self, node):
+        """ reequilibre l'abre si il faut """
+        courant = node.parent
+        while courant is not None:
+            courant.update_hauteur()
+            eq = courant.equilibre()
             
-        else:
-            self.hauteur = -1
-    
-    def MAJ_equilibre(self,recursion=True):
-        """ outils pour la fonction de reequilibrage"""
-        if(not self.node is None):
-            if recursion:
-                if(self.node.left is not None):
-                    self.node.left.MAJ_equilibre()
-                if(self.node.right is not None):
-                    self.node.right.MAJ_equilibre()
-            self.equilibre = self.node.left.hauteur - self.node.right.hauteur
-        else:
-            self.equilibre = 0
-        
-    def recherche(self,val):
-        """ recherche une cle dans notre AVL"""
-        nodeCourant = self.node
-        
-        
-        
-        while(nodeCourant is not None):
-            if(val.eg(nodeCourant.key)):
-                return nodeCourant
-            elif(val.inf(nodeCourant.key)):
-                
-                nodeCourant = nodeCourant.left.node
+            if eq < -1:
+                """ désiquilibre a droite"""
+                if courant.right:
+                    # check the right child of current to see if it's left heavy
+                    right_eq = courant.right.equilibre()
+                    if right_eq >= 1:
+                        # right left
+                        self.right_rotation(courant.right)
+                    self.left_rotation(courant)
+                    courant = courant.parent
+                    continue
+                else:
+                    # left
+                    self.left_rotation(courant)
+
+            elif eq > 1:
+                """ désiquilibre a gauche"""
+                if courant.left:
+                    # check the left child of current to see if it's right heavy
+                    left_eq = courant.left.equilibre()
+                    if left_eq <= -1:
+                        # left right
+                        self.left_rotation(courant.left)
+                    self.right_rotation(courant)
+                    courant = courant.parent
+                    continue
+                else:
+                    """ equilibré"""
+                    self.right_rotation(courant)
             else:
-                
-                nodeCourant = nodeCourant.right.node
-        
-        return nodeCourant
-    
-    def printTree(self, node=None, level=0):
-        if not node:
-            node = self.node
+                # balanced
+                courant = courant.parent
 
-        if node.right.node:
-            self.printTree(node.right.node, level + 1)
-            print(('\t' * level), (' / '))
-        print(('\t' * level), node.key)
+    def left_rotation(self, node):
+        """ rotation gauche simple"""
+        # print('left_rotation({})'.format(node))
 
-        if node.left.node:
-            print(('\t' * level), (' \\ '))
-            self.printTree(node.left.node, level + 1)
+        # o    // node
+        #  \
+        #   o  // node.right_child
+        #    \
+        #       o
+
+        # nodes right child becomes parent, node becomes left child
+        new_left = node
+        new_right_of_left = node.right.left
+        new_parent = node.right
+
+        new_grandparent = node.parent
+
+        if new_grandparent is None:
+            # new_parent is becoming the tree's root
+            self.racine = new_parent
+            new_parent.parent = None
+        else:
+            # check to see if this is the left or right child of the parent node
+            if node.data .sup(new_grandparent.data):
+                new_grandparent.right = new_parent
+            else:
+                new_grandparent.left = new_parent
+            new_parent.parent = new_grandparent
+
+        new_parent.left = new_left
+        new_left.parent = new_parent
+        new_left.right = new_right_of_left
+        if new_right_of_left:
+            new_right_of_left.parent = new_left
+        new_left.update_hauteur()
+        new_parent.update_hauteur()
+
+    def right_rotation(self, node):
+        """rotation droite simple"""
+        # print('right_rotation({})'.format(node))
+
+        #       o // node
+        #    /
+        #   o   // node.left_child
+        #  /
+        # o
+
+        # nodes left child becomes parent, node becomes right child
+        new_right = node
+        new_left_of_right = node.left.right
+        new_parent = node.left
+
+        new_grandparent = node.parent
+        if new_grandparent is None:
+            # new_parent is becoming the tree's root
+            self.racine = new_parent
+            new_parent.parent = None
+        else:
+            # check to see if this is the left or right child of the parent node
+            if node.data.sup(new_grandparent.data):
+                new_grandparent.right = new_parent
+            else:
+                new_grandparent.left = new_parent
+            new_parent.parent = new_grandparent
+
+        new_parent.right = new_right
+        new_right.parent = new_parent
+        new_right.left = new_left_of_right
+        if new_left_of_right:
+            new_left_of_right.parent = new_right
+        new_right.update_hauteur()
+        new_parent.update_hauteur()
+
     
+
+
+
+if __name__ == "__main__":
     
-    
-def main():
-    a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
-    b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
-    c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
-    d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
-    e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
+    a=cle.Cle("0x00000000000000000000000000000001")
+    b=cle.Cle("0x00000000000000000000000000000002")
+    c=cle.Cle("0x00000000000000000000000000000003")
+    d=cle.Cle("0x00000000000000000000000000000004")
+    e=cle.Cle("0x00000000000000000000000000000005")
     f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
     l = list()
-    l.extend([e,a,c,d,b])
-    avl = ArbreAVL()
-    avl.consIter(l)
-    avl.printTree()    
-    print(avl.recherche(d))
+    l.extend([a,b,c])
+    data = [a,b,c,d,e,f]
+    avl_tree = AVL(data)
+    print(avl_tree)
     
-        
-if __name__ == "__main__":
-    main()
-        
-        
