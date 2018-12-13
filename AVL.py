@@ -17,7 +17,7 @@ class Node(object):
         return (self.left.hauteur if self.left else -1) - (self.right.hauteur if self.right else -1)
     
     def update_hauteur(self):
-        """ mets a jour la hauteur du noeud de maniere reccursive """
+        """ mets a jour la hauteur (ou plutot la profondeur, la racine a la plus grande profondeur) du noeud de maniere reccursive """
         if not self.right and not self.left:
             self.hauteur = 0
         elif not self.right:
