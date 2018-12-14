@@ -3,7 +3,7 @@ https://equi4.com/md5/
 https://www.ietf.org/rfc/rfc1321.txt"""
 import math
 import binascii
-import struct
+
 
 r = []
 k = [None]*64
@@ -38,22 +38,16 @@ def add_binaire(*args) :
 
 #Préparation du message (padding) :
 def padding(message) :
-    message = (bytearray(message.encode("utf-8")))
-    lenByte = (8 * len(message))%64
-    message.append(0x1)
+    msg = (bytearray(message.encode("utf-8")))
+    lenByte = (8 * len(msg))%64
+    msg.append(0x80)
     #Ajout de 0, jusqu'à ce que la taille du message en bits soit soit congruents 
     # à 448 étant donnée que nous sommes en bytes, 448/8 = 56
-    while((len(message)*8)%512  != 448) :
-        message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(lenByte)
-    return message
+    while((len(msg)*8)%512  != 448) :
+        msg.append(0x0)
+        
+    msg+= lenByte.to_bytes(8,byteorder='little')
+    return msg
 
 #decoupage du message en dans une liste, par bloc de 32 bits
 def decoupageByte(message) :
@@ -84,20 +78,26 @@ def operationI(a,b,c,d,x,s,i) :
 
 #Retourne x avec n bits déplacer vers la gauche 
 def leftrotate(x, c) :
-    return (x<<c) | (x<<(32-c))
+    return (x<<c) | (x>>32-c)
 
-def toLittleIndian(liste) :
+def toLittleIndianListe(liste) :
     little = list()
     for i in range(len(liste)):
         chaine = ''
         liste[i] = liste[i][2:]
         for j in range(len(liste[i]),0,-2):
-            chaine+=liste[i][j-2]
-            chaine+=liste[i][j-1]
+            chaine = toLittleIndian(liste[i])
         little.append(int(chaine,16))
     return little
 
-#print(left_rotate(hex("Bonjour"), 3))
+def toLittleIndian(mot) :
+    chaine = ''
+    for i in range(len(mot),0,-2):
+        chaine+=mot[i-2]
+        chaine+=mot[i-1]
+    return chaine
+#MD5 stackoverflow
+#Ne fonctionne pas
 def md5Hash(message) :
     message = padding(message)
     messageDecoupe = decoupageByte(message)
@@ -204,43 +204,40 @@ def md5Wiki(message) :
     DD = d
     f = 0 
     g = 0
-    w = toLittleIndian(m)
+    w = toLittleIndianListe(m)
     for j in range(0,64) :
         #Calcul avec F
-        if 0<= j < 16 :
-            f = F(b,c,d)
+        if 0<= j | j < 16 :
+            f = F(b,c,d)%(2**32)
             g = j
-        if 16<= j < 32 :
-            f = G(b,c,d)
+        if 16<= j | j < 32 :
+            f = G(b,c,d)%(2**32)
             g = (5*j + 1)%16 
-        if 32<= j <= 48 :
-            f = H(b,c,d)
+        if 32<= j | j < 48 :
+            f = H(b,c,d)%(2**32)
             g =  (3*j + 5)%16       
-        if 48<= j <64 :
-            f = I(b,c,d)
+        if 48<= j | j <64 :
+            f = I(b,c,d)%(2**32)
             g = (7*j) % 16
-        temp = d 
-        d = c
-        c = b
-        b = leftrotate((f + a + int(k[j],16) + w[g]), r[j])
-        a = temp
-    AA = AA + a
-    BB = BB + b
-    CC = CC + c
-    DD = DD + d
-    chaine = [None]*4
-    chaine[0] = hex(AA)
-    chaine[1] = (hex(BB))
-    chaine[2] = (hex(CC))
-    chaine[3] = (hex(DD))
+        temp = d %(2**32)
+        d = c%(2**32)%(2**32)
+        c = b%(2**32)%(2**32)
+        b = leftrotate((f + a + int(k[j],16) + w[g]), r[j])%(2**32)
+        a = temp%(2**32)
+    AA = (AA + a)%(2**32)
+    BB = (BB + b)%(2**32)
+    CC = (CC + c)%(2**32)
+    DD = (DD + d)%(2**32)
+    chaine = list() 
+    chaine.append(hex(AA)[2:])
+    chaine.append(hex(BB)[2:])
+    chaine.append(hex(CC)[2:])
+    chaine.append(hex(DD)[2:])
+    for i in range(len(chaine)) :
+        chaine[i] = toLittleIndian(chaine[i])
     return chaine
 
-test = padding("coucou")
-decoupetest = decoupageByte(test)
-print(decoupetest)
-littleIn = toLittleIndian(decoupetest)
-for i in range(len(decoupetest)) :
-    print(littleIn[i])
 
-motwiki = (md5Wiki(""))
+
+motwiki = (md5Wiki("The quick brown fox jumps over the lazy dog"))
 print(motwiki)
