@@ -1,24 +1,28 @@
-""" XD c'est mega chaud a implementer en vrai...
-https://equi4.com/md5/
-https://www.ietf.org/rfc/rfc1321.txt"""
+#grave inspiré de la version de Durassel 
+
 import math
-import binascii
-import struct
-
-r = []
-k = [None]*64
-
-r[0:16] = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22]
-r[16:32] = [5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20]
-r[32:48] = [4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23]
-r[48:64] = [6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21]
 
 
-#MD5 utilise des sinus d'entiers pour ses constantes :
-for i in range(0,64):
-    k[i] = hex(math.floor(abs(math.sin(i + 1)) * 2**32))
+k = []*64
+r = []*64
 
-#Les boucles principales
+#Initialisation de r
+r =  [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
+      5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
+      4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
+      6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21]
+
+#Initialisation de k
+for i in range(0, 64):
+    k.append(math.floor(abs(math.sin(i+1)) * 2**32))
+
+#Initialisation de nos variables A B C D
+h0 =0x67452301
+h1 =0xEFCDAB89
+h2 =0x98BADCFE
+h3 =0x10325476
+
+#Les fonctions outils
 def F(b, c, d):
     return (b & c) | (~b & d)
 
@@ -31,216 +35,92 @@ def H(b, c, d):
 def I(b, c, d):
     return c ^ (b | ~d)
 
-def add_binaire(*args) :
-    return bin(sum(int(x, 2) for x in args))
+def leftrotate(x, y):
+    x &= 0xFFFFFFFF # le '&= 0xFFFFFFFF' sert a garder nos variables sur 32 bits sinon l'algo ne marche pas
+    return ((x<<y) | (x>>(32-y))) & 0xFFFFFFFF
+
+def padding(message):
+    msg = bytearray(message,"utf-8") # On convertit notre message en bytes
+    lenByte = (8 * len(msg)) & 0xffffffffffffffff # On a la taille en de notre msg en bytes avec len(msg), on multiplie par 8 pour avoir la taille en bit (8 bits = 1 bytes)
+    # on veux ajouter le bit '1' a la fin du message qui est rpz en bytes on vas donc devoir ajouter un bytes a ce gros message avec 1 au debut (pour l'avoir a la fin du mes) et des 0 partout apres
+    msg.append(0x80) # 0x80 -> 1 byte = 1000 0000 en bits
+    # On veux ajouter le bit '0' jusqu'à ce que la taille du message en bit soit egale à 448 (mod 512)
+    #la taille du message en bit est comme au dessus : 8*len(msg) avec msg une representation en byte
+    while (8*len(msg)) % 512 != 448:
+        msg.append(0)
+    # On ajoute la taille initial du message a la fin du message (elle vas occuper les 64 derniers bit)
+    #elle est en little endiant 
+    msg += lenByte.to_bytes(8, byteorder='little')
+    return msg
+
+# MD5 l'algo du wiki
+def md5(msg):
+    
+    # Preparation du message
+    message = padding(msg)
+    #len(msg) apres le padding est un multiple de 512 bit, comme le message est en bytes il aura comme len un multiple de 512/8 
+    #c'est pour ca que sa len ici est 64 (le message etais court on a eu que un bloc de 512 bits == 64 bytes *8)
+    
+    h0 =0x67452301
+    h1 =0xEFCDAB89
+    h2 =0x98BADCFE
+    h3 =0x10325476
+    
+    
+    # le nb de tour qu'on vas faire ici vas dependre du message de base et en combien de bloc de 512 bits il a du etre subdiviser si il est court en general on rentre que une fois dans cette boucle si c'est un paragraphe on aura donc plusieur block de 512 bit a traiter
+    # On fait un range avec un pas de 64 car on regarde bloc de 512 bits par bloc de 512 bits
+    for i in range(0, len(message), 64):
+        
+        #Initialisation des valeurs de hachage
+        AA = h0
+        BB = h1
+        CC = h2
+        DD = h3
+        # m est le bloc actuel de 512 bit
+        m = message[i : i + 64]
+        for j in range(64):
+            # Boucle principale on applique nos formules
+            if (0 <= j | j < 16):
+                f = F(BB,CC,DD)
+                g = j
+            elif (j >= 16 | j < 32):
+                f = G(BB,CC,DD)
+                g = (5 * j + 1) % 16
+            elif (j >= 32 | j < 48):
+                f = H(BB,CC,DD)
+                g = (3 * j + 5) % 16
+            elif (j >= 48 | j < 64):
+                f = I(BB,CC,DD)
+                g = (7 * j) % 16
+            # On subdivide le bloc en mini bloc et on mets les mini bloc en little endiant
+            w = int.from_bytes(m[4*g:4*g+4],byteorder='little')
+            # ont mets a jour nos variables
+            tmp = AA+f+k[j]+w & 0xFFFFFFFF # Apres chaque operation qui change une valeur on veux etre sur qu'elle reste sur 32 bits d'où le &=0FFFFFFFF
+            AA = DD
+            DD = CC
+            CC = BB
+            BB = (BB+leftrotate(tmp,r[j])) & 0xFFFFFFFF
 
 
+        # On ajoute le resultat a chaque bloc au fur et a mesure qu'on parcours nos bloc de 512 bits
+        h0 += AA
+        h0 &= 0xFFFFFFFF
+        h1 += BB
+        h1 &= 0xFFFFFFFF
+        h2 += CC
+        h2 &= 0xFFFFFFFF
+        h3 += DD
+        h3 &= 0xFFFFFFFF
+        
+    # On reconstitue le message modifier par md5 ce message est sur 128 bits et on a h0 qui correspond au 32 premiers bits h1 au 32 suivant etc... d'où les decalage de 32, de 64, de 96 pour reconstituer le message sur 128 bits
+    x = h0 + (h1 << 32) + (h2 << 64) + (h3 << 96)
+    
+    # L'algo nous fournis un message en little endian ici on le remets dans le bon sens pour pouvoir le lire c'est tout 
+    return hexAffiche(x.to_bytes(16, byteorder='little'))
 
-#Préparation du message (padding) :
-def padding(message) :
-    message = (bytearray(message.encode("utf-8")))
-    lenByte = (8 * len(message))%64
-    message.append(0x1)
-    #Ajout de 0, jusqu'à ce que la taille du message en bits soit soit congruents 
-    # à 448 étant donnée que nous sommes en bytes, 448/8 = 56
-    while((len(message)*8)%512  != 448) :
-        message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(0x0)
-    message.append(lenByte)
-    return message
+# Return md5 in hexadecimal
+def hexAffiche(digest):
+    return '{:032x}'.format(int.from_bytes(digest, byteorder='big'))
 
-#decoupage du message en dans une liste, par bloc de 32 bits
-def decoupageByte(message) :
-    decoupe = []
-    for i in range(0,len(message),4) :
-        decoupe.append(hex(message[i]*(16**6) + message[i+1]*(16**4) + message[i+2]*(16**2) + message[i+3]))
-    return decoupe
-
-def operationF(a,b,c,d,x,s,i) :
-    val = (a+F(b,c,d) + x + int(k[i-1],16))
-    val = leftrotate(val, s)
-    return b+val
-
-def operationG(a,b,c,d,x,s,i) :
-    val = (a+G(b,c,d) + x + int(k[i-1],16))
-    val = leftrotate(val, s)
-    return b+val
-
-def operationH(a,b,c,d,x,s,i) :
-    val = (a+H(b,c,d) + x + int(k[i-1],16))
-    val = leftrotate(val, s)
-    return b+val
-
-def operationI(a,b,c,d,x,s,i) :
-    val = (a+I(b,c,d) + x + int(k[i-1],16))
-    val = leftrotate(val, s)
-    return b+val
-
-#Retourne x avec n bits déplacer vers la gauche 
-def leftrotate(x, c) :
-    return (x<<c) | (x<<(32-c))
-
-def toLittleIndian(liste) :
-    little = list()
-    for i in range(len(liste)):
-        chaine = ''
-        liste[i] = liste[i][2:]
-        for j in range(len(liste[i]),0,-2):
-            chaine+=liste[i][j-2]
-            chaine+=liste[i][j-1]
-        little.append(int(chaine,16))
-    return little
-
-#print(left_rotate(hex("Bonjour"), 3))
-def md5Hash(message) :
-    message = padding(message)
-    messageDecoupe = decoupageByte(message)
-    a = 0x67452301
-    b = 0xEFCDAB89
-    c = 0x98BADCFE
-    d = 0x10325476
-    AA = a
-    BB = b
-    CC = c
-    DD = d
-
-    for j in range(0,len(messageDecoupe),16) :
-        #Calcul avec F
-        a = operationF(a,b,c,d,int(messageDecoupe[j],16),r[0], 1)
-        d = operationF(d,a,b,c,int(messageDecoupe[j+1],16),r[1], 2)
-        c = operationF(c,d,b,a,int(messageDecoupe[j+2],16),r[2], 3)
-        b = operationF(b,c,d,a,int(messageDecoupe[j+3],16),r[3], 4)
-        a = operationF(a,b,c,d,int(messageDecoupe[j+4],16),r[4], 5)
-        d = operationF(d,a,b,c,int(messageDecoupe[j+5],16),r[5], 6)
-        c = operationF(c,d,b,a,int(messageDecoupe[j+6],16),r[6], 7)
-        b = operationF(b,c,d,a,int(messageDecoupe[j+7],16),r[7], 8)
-        a = operationF(a,b,c,d,int(messageDecoupe[j+8],16),r[8], 9)
-        d = operationF(d,a,b,c,int(messageDecoupe[j+9],16),r[9], 10)
-        c = operationF(c,d,b,a,int(messageDecoupe[j+10],16),r[10], 11)
-        b = operationF(b,c,d,a,int(messageDecoupe[j+11],16),r[11], 12)
-        a = operationF(a,b,c,d,int(messageDecoupe[j+12],16),r[12], 13)
-        d = operationF(d,a,b,c,int(messageDecoupe[j+13],16),r[13], 14)
-        c = operationF(c,d,b,a,int(messageDecoupe[j+14],16),r[14], 15)
-        b = operationF(b,c,d,a,int(messageDecoupe[j+15],16),r[15], 16)
-        #Calcul avec G
-        a = operationG(a,b,c,d,int(messageDecoupe[j],16),r[16], 17)
-        d = operationG(d,a,b,c,int(messageDecoupe[j+1],16),r[17], 18)
-        c = operationG(c,d,b,a,int(messageDecoupe[j+2],16),r[18], 19)
-        b = operationG(b,c,d,a,int(messageDecoupe[j+3],16),r[19], 20)
-        a = operationG(a,b,c,d,int(messageDecoupe[j+4],16),r[20], 21)
-        d = operationG(d,a,b,c,int(messageDecoupe[j+5],16),r[21], 22)
-        c = operationG(c,d,b,a,int(messageDecoupe[j+6],16),r[22], 23)
-        b = operationG(b,c,d,a,int(messageDecoupe[j+7],16),r[23], 24)
-        a = operationG(a,b,c,d,int(messageDecoupe[j+8],16),r[24], 25)
-        d = operationG(d,a,b,c,int(messageDecoupe[j+9],16),r[25], 26)
-        c = operationG(c,d,b,a,int(messageDecoupe[j+10],16),r[26], 27)
-        b = operationG(b,c,d,a,int(messageDecoupe[j+11],16),r[27], 28)
-        a = operationG(a,b,c,d,int(messageDecoupe[j+12],16),r[28], 29)
-        d = operationG(d,a,b,c,int(messageDecoupe[j+13],16),r[29], 30)
-        c = operationG(c,d,b,a,int(messageDecoupe[j+14],16),r[30], 31)
-        b = operationG(b,c,d,a,int(messageDecoupe[j+15],16),r[31], 32)
-        #Calcul avec H
-        a = operationH(a,b,c,d,int(messageDecoupe[j],16),r[32], 33)
-        d = operationH(d,a,b,c,int(messageDecoupe[j+1],16),r[33], 34)
-        c = operationH(c,d,b,a,int(messageDecoupe[j+2],16),r[34], 35)
-        b = operationH(b,c,d,a,int(messageDecoupe[j+3],16),r[35], 36)
-        a = operationH(a,b,c,d,int(messageDecoupe[j+4],16),r[36], 37)
-        d = operationH(d,a,b,c,int(messageDecoupe[j+5],16),r[37], 38)
-        c = operationH(c,d,b,a,int(messageDecoupe[j+6],16),r[38], 39)
-        b = operationH(b,c,d,a,int(messageDecoupe[j+7],16),r[39], 40)
-        a = operationH(a,b,c,d,int(messageDecoupe[j+8],16),r[40], 41)
-        d = operationH(d,a,b,c,int(messageDecoupe[j+9],16),r[41], 42)
-        c = operationH(c,d,b,a,int(messageDecoupe[j+10],16),r[42], 43)
-        b = operationH(b,c,d,a,int(messageDecoupe[j+11],16),r[43], 44)
-        a = operationH(a,b,c,d,int(messageDecoupe[j+12],16),r[44], 45)
-        d = operationH(d,a,b,c,int(messageDecoupe[j+13],16),r[45], 46)
-        c = operationH(c,d,b,a,int(messageDecoupe[j+14],16),r[46], 47)
-        b = operationH(b,c,d,a,int(messageDecoupe[j+15],16),r[47], 48)
-        #Calcul avec I
-        a = operationI(a,b,c,d,int(messageDecoupe[j],16),r[48], 49)
-        d = operationI(d,a,b,c,int(messageDecoupe[j+1],16),r[49], 50)
-        c = operationI(c,d,b,a,int(messageDecoupe[j+2],16),r[50], 51)
-        b = operationI(b,c,d,a,int(messageDecoupe[j+3],16),r[51], 52)
-        a = operationI(a,b,c,d,int(messageDecoupe[j+4],16),r[52], 53)
-        d = operationI(d,a,b,c,int(messageDecoupe[j+5],16),r[53], 54)
-        c = operationI(c,d,b,a,int(messageDecoupe[j+6],16),r[54], 55)
-        b = operationI(b,c,d,a,int(messageDecoupe[j+7],16),r[55], 56)
-        a = operationI(a,b,c,d,int(messageDecoupe[j+8],16),r[56], 57)
-        d = operationI(d,a,b,c,int(messageDecoupe[j+9],16),r[57], 58)
-        c = operationI(c,d,b,a,int(messageDecoupe[j+10],16),r[58], 59)
-        b = operationI(b,c,d,a,int(messageDecoupe[j+11],16),r[59], 60)
-        a = operationI(a,b,c,d,int(messageDecoupe[j+12],16),r[60], 61)
-        d = operationI(d,a,b,c,int(messageDecoupe[j+13],16),r[61], 62)
-        c = operationI(c,d,b,a,int(messageDecoupe[j+14],16),r[62], 63)
-        b = operationI(b,c,d,a,int(messageDecoupe[j+15],16),r[63], 64)
-    a = AA + a
-    b = BB + b
-    c = CC + c
-    d = DD + d
-    chaine = [None]*4
-    chaine[0] = hex(a)
-    chaine[1] = (hex(b))
-    chaine[2] = (hex(c))
-    chaine[3] = (hex(d))
-    return chaine
-
-
-def md5Wiki(message) :
-    message = padding(message)
-    m = decoupageByte(message)
-    a = 0x67452301
-    b = 0xEFCDAB89
-    c = 0x98BADCFE
-    d = 0x10325476
-    AA = a
-    BB = b
-    CC = c
-    DD = d
-    f = 0 
-    g = 0
-    w = toLittleIndian(m)
-    for j in range(0,64) :
-        #Calcul avec F
-        if 0<= j < 16 :
-            f = F(b,c,d)
-            g = j
-        if 16<= j < 32 :
-            f = G(b,c,d)
-            g = (5*j + 1)%16 
-        if 32<= j <= 48 :
-            f = H(b,c,d)
-            g =  (3*j + 5)%16       
-        if 48<= j <64 :
-            f = I(b,c,d)
-            g = (7*j) % 16
-        temp = d 
-        d = c
-        c = b
-        b = leftrotate((f + a + int(k[j],16) + w[g]), r[j])
-        a = temp
-    AA = AA + a
-    BB = BB + b
-    CC = CC + c
-    DD = DD + d
-    chaine = [None]*4
-    chaine[0] = hex(AA)
-    chaine[1] = (hex(BB))
-    chaine[2] = (hex(CC))
-    chaine[3] = (hex(DD))
-    return chaine
-
-test = padding("coucou")
-decoupetest = decoupageByte(test)
-print(decoupetest)
-littleIn = toLittleIndian(decoupetest)
-for i in range(len(decoupetest)) :
-    print(littleIn[i])
-
-motwiki = (md5Wiki(""))
-print(motwiki)
+print(md5("Merci mon gars Durassel"))
+print(md5("vraiment le meilleur"))
