@@ -17,20 +17,9 @@ class TasMinArbre:
             self.data = data
             self.nbNoeud = 1
 
-    def NbNoeud(self):
-                
-        """renvoie le nombre de noeud qu'à le sous arbre enraciné en ce noeud"""
-        if self.right is None and self.left is None :
-            return 1
-        elif self.right == None :
-            return 1 + self.left.NbNoeud()
-        elif self.left == None :
-            return 1 + self.right.NbNoeud()
-        else :
-            return 1 + self.right.NbNoeud() + self.left.NbNoeud()
 
     def Ajout(self, data):
-        """Ajoute l'élement data dans un arbre"""
+        #Ajoute l'élement data dans un arbre
         if self.data is not None:
             if self.data.inf(data) :
                 if self.left is None :
@@ -59,32 +48,6 @@ class TasMinArbre:
             return True
 
 
-    def ajoutNode(self,data):
-        """Ajoute un node"""
-        if self.data is not None :
-            if self.data.inf(data.data):
-                if self.left is None:
-                    self.left = data
-                    return True
-                if self.right is None:
-                    self.right = data
-                    return True
-                if self.left.nbNoeud >= self.right.nbNoeud:
-                    self.right.ajoutNode(data)
-                    return True
-                if self.left.nbNoeud < self.right.nbNoeu:
-                    self.left.ajoutNode(data)
-                    return True
-            else:
-                valeur = self
-                self = data
-                self.ajoutNode(valeur)
-                return True
-        else :
-            self = data
-            return True
-
-
     def prefixePrint(self):
         if self.left:
             self.left.prefixePrint()
@@ -94,7 +57,7 @@ class TasMinArbre:
 
 
     def supprMin(self):
-        """Supprime l'élement le plus petit de l'arbre"""
+        #Supprime l'élement le plus petit de l'arbre
         if self.data is None:
             return False
         else:
@@ -103,7 +66,7 @@ class TasMinArbre:
 
 
     def ajoutArbre(self, arbre):
-        """ ajoute un sous arbre dans l'arbre qui l'appelle"""
+        #Ajoute un sous arbre dans l'arbre qui l'appelle
         if arbre.right is not None :
             self.ajoutArbre(arbre.right)
         if arbre.left is not None :
@@ -114,7 +77,7 @@ class TasMinArbre:
 
 
 def union(arbre1, arbre2) :
-    """Fais l'union de deux arbres"""
+    #Fais l'union de deux arbres
     if arbre1 is None :
         return arbre2
     if arbre2 is None :
@@ -131,7 +94,7 @@ def union(arbre1, arbre2) :
 
 
 def consIter(liste) :
-    """Construction itérative d'un arbre à partir d'une liste d'élement"""
+    #Construction itérative d'un arbre à partir d'une liste d'élement
     if(len(liste)>0):
         racine = TasMinArbre(liste[0])
         for i in range(1,len(liste)):

@@ -13,11 +13,11 @@ class Node(object):
         return str(data)
     
     def equilibre(self):
-        """ Methode qui nous dit de quelle coté l'arbre est déséquilibré ou si il est equilibré"""
+        # Methode qui nous dit de quelle coté l'arbre est déséquilibré ou si il est equilibré selon la valeur de retour
         return (self.left.hauteur if self.left else -1) - (self.right.hauteur if self.right else -1)
     
     def update_hauteur(self):
-        """ mets a jour la hauteur (ou plutot la profondeur, la racine a la plus grande profondeur) du noeud de maniere reccursive """
+        #mets a jour la hauteur du noeud de maniere reccursive (ou plutot la profondeur -> la racine a la plus grande profondeur) 
         if not self.right and not self.left:
             self.hauteur = 0
         elif not self.right:
@@ -39,7 +39,7 @@ class AVL(object):
         return str(self.arbreBinareToTab())
     
     def arbreBinareToTab(self):
-        """renvoie la representation sous forme de tableau de notre arbre"""
+        #renvoie la representation sous forme de tableau de notre arbre
         queue = list()
         items = list()
         if not self.estVide():
@@ -54,11 +54,11 @@ class AVL(object):
         return items
 
     def estVide(self):
-        """renvoie vrais si l'arbre est vide"""
+        #renvoie True si l'arbre est vide
         return self.racine is None
 
     def recherche(self, data):
-        """ recherche de façon itérative une cle dans notre AVL"""
+        #recherche de façon itérative une cle dans notre AVL
         courant = self.racine
         while courant is not None:
             if courant.data.eg(data):
@@ -73,7 +73,7 @@ class AVL(object):
         return None
 
     def ajout(self, data):
-        """ ajoute une cle (encapsuler dans la classe node definit plus haut) dans notre arbre """
+        #ajoute une cle (encapsuler dans la classe node definit plus haut) dans notre arbre
         n = Node(data)
         if self.racine is None:
             self.racine = n
@@ -85,23 +85,22 @@ class AVL(object):
                 print(" cette valeur est deja dans l'arbre""")
                 return None
             elif courant.data.sup(data):
-                """ si data > valeur actuelle on l'ajoute a gauche du node qui contient la valeur actuelle"""
+                #si data > valeur actuelle on l'ajoute a gauche du node qui contient la valeur actuelle
                 if not courant.left:
                     courant.left = n
                     n.parent = courant
-                    """mise a jour de la hauteur du parent et rotation si l'arbre est déséquilibré apres cet ajout"""
-                    self.reequilibre(n)
+                    self.reequilibre(n) #mise a jour de la hauteur du parent et rotation si l'arbre est déséquilibré apres cet ajout
                     return
                 else:
-                    """ si le fils gauche du noeud courant etait deja remplis on vas faire l'ajout en prenant ce fils comme noeud actuel dans une seconde itération"""
+                    #si le fils gauche du noeud courant etait deja remplis on vas faire l'ajout en prenant ce fils comme noeud actuel dans une seconde itération
                     courant = courant.left
                     continue
             elif courant.data.inf(data):
-                """ si data < valeur actuelle on l'ajoute a droite du node qui contient la valeur actuelle"""
+                #si data < valeur actuelle on l'ajoute a droite du node qui contient la valeur actuelle
                 if not courant.right:
                     courant.right = n
                     n.parent = courant
-                    """mise a jour de la hauteur du parent et rotation si l'arbre est déséquilibré apres cet ajout"""
+                    #mise a jour de la hauteur du parent et rotation si l'arbre est déséquilibré apres cet ajout
                     self.reequilibre(n)
                     return
                 else:
@@ -109,18 +108,18 @@ class AVL(object):
                     continue
 
     def reequilibre(self, node):
-        """ reequilibre l'abre si il faut """
+        #reequilibre l'abre si il faut
         courant = node.parent
         while courant is not None:
             courant.update_hauteur()
             eq = courant.equilibre()
             
             if eq < -1:
-                """ désiquilibre a droite"""
+                #déséquilibre a droite
                 if courant.right:
                     right_eq = courant.right.equilibre()
                     if right_eq >= 1:
-                        """ double rotation"""
+                        #double rotation
                         self.right_rotation(courant.right)
                     self.left_rotation(courant)
                     courant = courant.parent
@@ -129,11 +128,11 @@ class AVL(object):
                     self.left_rotation(courant)
 
             elif eq > 1:
-                """ désiquilibre a gauche"""
+                #déséquilibre a gauche
                 if courant.left:
                     left_eq = courant.left.equilibre()
                     if left_eq <= -1:
-                        "double rotation"""
+                        #double rotation
                         self.left_rotation(courant.left)
                     self.right_rotation(courant)
                     courant = courant.parent
@@ -142,11 +141,11 @@ class AVL(object):
                     
                     self.right_rotation(courant)
             else:
-                """ equilibré"""
+                #equilibré
                 courant = courant.parent
 
     def left_rotation(self, node):
-        """ rotation gauche simple"""
+        #rotation gauche simple
         new_left = node
         new_right_of_left = node.right.left
         new_parent = node.right
@@ -172,7 +171,7 @@ class AVL(object):
         new_parent.update_hauteur()
 
     def right_rotation(self, node):
-        """rotation droite simple"""
+        #rotation droite simple
         
         new_right = node
         new_left_of_right = node.left.right

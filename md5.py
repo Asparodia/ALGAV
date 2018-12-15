@@ -1,5 +1,3 @@
-#grave inspiré de la version de Durassel 
-
 import math
 
 
