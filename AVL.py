@@ -118,47 +118,35 @@ class AVL(object):
             if eq < -1:
                 """ désiquilibre a droite"""
                 if courant.right:
-                    # check the right child of current to see if it's left heavy
                     right_eq = courant.right.equilibre()
                     if right_eq >= 1:
-                        # right left
+                        """ double rotation"""
                         self.right_rotation(courant.right)
                     self.left_rotation(courant)
                     courant = courant.parent
                     continue
                 else:
-                    # left
                     self.left_rotation(courant)
 
             elif eq > 1:
                 """ désiquilibre a gauche"""
                 if courant.left:
-                    # check the left child of current to see if it's right heavy
                     left_eq = courant.left.equilibre()
                     if left_eq <= -1:
-                        # left right
+                        "double rotation"""
                         self.left_rotation(courant.left)
                     self.right_rotation(courant)
                     courant = courant.parent
                     continue
                 else:
-                    """ equilibré"""
+                    
                     self.right_rotation(courant)
             else:
-                # balanced
+                """ equilibré"""
                 courant = courant.parent
 
     def left_rotation(self, node):
         """ rotation gauche simple"""
-        # print('left_rotation({})'.format(node))
-
-        # o    // node
-        #  \
-        #   o  // node.right_child
-        #    \
-        #       o
-
-        # nodes right child becomes parent, node becomes left child
         new_left = node
         new_right_of_left = node.right.left
         new_parent = node.right
@@ -166,11 +154,9 @@ class AVL(object):
         new_grandparent = node.parent
 
         if new_grandparent is None:
-            # new_parent is becoming the tree's root
             self.racine = new_parent
             new_parent.parent = None
         else:
-            # check to see if this is the left or right child of the parent node
             if node.data .sup(new_grandparent.data):
                 new_grandparent.right = new_parent
             else:
@@ -187,26 +173,16 @@ class AVL(object):
 
     def right_rotation(self, node):
         """rotation droite simple"""
-        # print('right_rotation({})'.format(node))
-
-        #       o // node
-        #    /
-        #   o   // node.left_child
-        #  /
-        # o
-
-        # nodes left child becomes parent, node becomes right child
+        
         new_right = node
         new_left_of_right = node.left.right
         new_parent = node.left
 
         new_grandparent = node.parent
         if new_grandparent is None:
-            # new_parent is becoming the tree's root
             self.racine = new_parent
             new_parent.parent = None
         else:
-            # check to see if this is the left or right child of the parent node
             if node.data.sup(new_grandparent.data):
                 new_grandparent.right = new_parent
             else:
