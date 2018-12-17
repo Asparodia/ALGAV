@@ -16,7 +16,7 @@ def mesureConsIter(name):
     for line in f:
         param.append(cle.Cle(line))
     a = TasMinTabCle.TasMinTab()
-    time = time + (mesureTemps(a.ConsIter,param)*(10**3))
+    time = time + (mesureTemps(a.ConsIter,param)*(10**6))
     
     return (time)
         
@@ -49,6 +49,7 @@ def mesureSuppMin(name):
         e=0
         s = time.time()
         a.SupMin()
+        
         e = time.time()
         tps = (tps + (e-s))*(10**3)
     return (tps)
@@ -84,7 +85,7 @@ Res.append(mesureUnion(fileName))
 print(Res)
 f = open("mesuresTasMinTab.txt","w")
     
-f.write(str(Res[0]) + " miliseconde pour tout construire avec ConsIter\n" )
+f.write(str(Res[0]) + " microseconde pour tout construire avec ConsIter\n" )
 f.write(str(Res[1]) + " miliseconde pour tout construire avec Ajout\n" )
 f.write(str(Res[2]) + " miliseconde pour tout supprimer avec SuppMin\n" )    
 f.write(str(Res[3]) + " miliseconde pour tout construire avec Union\n" )

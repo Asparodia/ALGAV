@@ -107,9 +107,10 @@ class TasMinTab():
         """
         Construit un tas qui aura pour valeurs les elements de la liste vals
         """
-        for i in range(0,len(vals)):
-            self.Ajout(vals[i])
-    
+        self.tas.extend(vals)
+        for i in range(1,len(self.tas),-1):
+            self.remonte(i)
+        self.tailleTas = len(vals)
     
     def Union(self,tas2):
         """ 
@@ -194,5 +195,5 @@ def main():
     
 
 
-#if __name__ == "__main__":
-#    main()
+if __name__ == "__main__":
+    main()
