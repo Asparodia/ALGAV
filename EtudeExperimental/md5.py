@@ -121,4 +121,4 @@ def hexAffiche(digest):
     return '{:032x}'.format(int.from_bytes(digest, byteorder='big'))
 
 print(md5("Merci mon gars Durassel"))
-print(md5("vraiment le meilleur"))
+print(md5("of"))

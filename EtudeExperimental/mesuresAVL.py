@@ -7,17 +7,22 @@ import time
 def shakeSpearHash(allFiles):
     allFiles.sort()
     i = 0
+    ensemble = set()
     s = time.time()
+    motsHash = list()
     for x in allFiles:
-        motsHash = list()
+        
         f = open("Shakespeare/"+x,'r')
         for line in f:
             i = i + 1
-            motsHash.append(cle.Cle("0x"+str(md5.md5(line))))
-    
+            if(line not in ensemble ):
+                ensemble.add(line)
+    for i in ensemble:
+        motsHash.append(cle.Cle("0x"+str(md5.md5(i))))
+    print(len(motsHash))  
     avlTree = AVL.AVL(motsHash)
+    
     e = time.time()
-    print(i)
     return (avlTree,e-s)
             
 
