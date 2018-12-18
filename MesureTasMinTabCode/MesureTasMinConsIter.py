@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-#pip install -U memory_profiler
-
 import TasMinTabCle
 import time
 import cle

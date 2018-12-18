@@ -3,20 +3,21 @@ import time
 import cle
 import os
 import csv
-
-def mesureTemps(fun,param):
+ 
+def mesureTemps(a,b):
+    c = FileBinomiale.FileBinomial()
     start = time.time()
-    fun(param)
+    c = FileBinomiale.UnionFile(a,b)
     end = time.time()
-    return (end-start)
-
-def mesureConsIter(allFiles):
-    allFiles.sort()
     
+    return (c,(end-start))
+ 
+def mesureUnion(allFiles):
+    allFiles.sort()
     res = list()
-    j = 0 
+    j = 0
     for x in allFiles:
-        
+         
         time = 0
         param = list()
         tourn = list()
@@ -25,24 +26,33 @@ def mesureConsIter(allFiles):
             param.append(cle.Cle(line))
         for c in param:
             tourn.append(FileBinomiale.TournoisBino(c))
+        
         f = FileBinomiale.FileBinomial()
-        time = time +( mesureTemps(f.ConsIter,tourn)*(10**3))
+        f.AjoutTournois(tourn[0])
+        
+        for i in range(1,len(tourn)):
+            b = FileBinomiale.FileBinomial()
+            b.AjoutTournois(tourn[i])  #Initialisation (temps negligeable)
+            (tasRes,tps) = mesureTemps(f,b)
+            time = time + (tps*(10**3))
+            f = tasRes
+            
         j = j + 1
         res.append((j,x,time))
         param = list()
     return res
-        
+       
 
-allFiles = os.listdir("cles_alea")
-Res = mesureConsIter(allFiles)
+allFiles = os.listdir("cles_alea")  
+       
+Res = mesureUnion(allFiles)
 total = 0
 for f in Res:
     total = total + f[2]
 Res.append((-1,"total du temps en miliseconde pour tout les fichiers : ",total))
-csvfileTime = "timeFileBinoConsIter.csv"
+
+csvfileTime = "timeFileBinoUnion.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
-
-

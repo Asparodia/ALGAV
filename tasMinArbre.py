@@ -20,15 +20,14 @@ class TasMinArbre:
 
     def Ajout(self, data):
         #Ajoute l'élement data dans un arbre
-        if self.data is not None:
+        if self.data is not None :
             if self.data.inf(data) :
+                self.nbNoeud = self.nbNoeud + 1
                 if self.left is None :
                     self.left = TasMinArbre(data)
-                    self.left.nbNoeud = self.left.nbNoeud + 1
                     return True
                 if self.right is None:
                     self.right = TasMinArbre(data)
-                    self.right.nbNoeud = self.right.nbNoeud + 1
                     return True
                 if self.left.nbNoeud >= self.right.nbNoeud:
                     self.right.Ajout(data)
@@ -39,7 +38,6 @@ class TasMinArbre:
             else :
                 valeur = self.data
                 self.data = data
-                self.nbNoeud = self.nbNoeud + 1
                 self.Ajout(valeur)
                 return True
 
@@ -115,7 +113,7 @@ def main():
     root.Ajout(d)
     root.Ajout(e)
     root.Ajout(f)
-    
+    print(root.nbNoeud)
     a=cle.Cle("0x9a5cdb45f1951a3a82b09af737fdc9aa")
     b=cle.Cle("0x53f7ffe901f3686b875af337039ee262")
     c=cle.Cle("0xa89aa39aa55e5bb5fb33a1802b248207")
@@ -131,9 +129,9 @@ def main():
     
     
     arbre = union(root,root2)
+    print(arbre.nbNoeud)
     
-    print(arbre.NbNoeud())
-
+    
 
 if __name__ == "__main__":
     main()

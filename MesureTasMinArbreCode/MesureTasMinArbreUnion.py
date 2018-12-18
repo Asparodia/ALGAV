@@ -5,7 +5,7 @@ import time
 import cle
 import os
 import csv
- 
+
 def mesureTemps(fun,a,b):
     
     start = time.time()
@@ -37,7 +37,7 @@ def mesureUnion(allFiles):
         res.append((j,x,time))
         param = list()
     return res
-       
+
 
 allFiles = os.listdir("cles_alea")  
        

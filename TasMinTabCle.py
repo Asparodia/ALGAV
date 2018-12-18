@@ -155,6 +155,7 @@ def main():
     d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
     e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
     f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
+    
     print("     Test Ajout : tabTest  ")  
     tabTest = TasMinTab()
     tabTest.Ajout(f)

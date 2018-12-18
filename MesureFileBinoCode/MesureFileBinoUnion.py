@@ -1,5 +1,3 @@
-#pip install -U memory_profiler
- 
 import FileBinomiale
 import time
 import cle
@@ -58,6 +56,3 @@ with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')
     writer.writerows(Res)
 print(Res)
-
-
-

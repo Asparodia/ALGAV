@@ -1,4 +1,3 @@
-
 import tasMinArbre
 import time
 import cle
@@ -46,4 +45,3 @@ with open(csvfileTime,"w") as output:
 print(Res)
 
 
-print(str(total))
