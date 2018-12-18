@@ -42,7 +42,7 @@ total = 0
 Res = mesureConsIter(allFiles)
 for f in Res:
     total = total + f[2]
-Res.append((-1,"total du temps en miliseconde pour tout les fichiers : ",total))
+Res.append((-1,"total du temps en milliseconde pour tout les fichiers : ",total))
 csvfileTime = "timeTasMinTabConsIter.csv"
 with open(csvfileTime,"w") as output:
     writer = csv.writer(output,lineterminator='\n')

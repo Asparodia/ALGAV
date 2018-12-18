@@ -1,4 +1,5 @@
-"""Classe qui vas nous servir a contenir nos clés sont des representation en hexadecimal d'un nombre codé sur 128 bits et a faire des comparaisons entre les clés"""
+"""Classe qui vas nous servir a contenir nos clés qui sont des representation en hexadecimal d'un nombre codé sur 128 bits 
+cette classe vas aussi nous servir a faire des comparaisons entre les clés"""
 class Cle:
 
     def __init__(self,cleStr):
@@ -16,9 +17,8 @@ class Cle:
         self.listeCle.append(self.C)
         self.listeCle.append(self.D)
         
-    """
-    fonction qui determine si la clef qui appelle cette methode est strictement plus petite que cle2 passer en parametre
-    """    
+    
+    #fonction qui determine si la clef qui appelle cette methode est strictement plus petite que cle2 passer en parametre   
     def inf(self, cle2):
         
         for i in range(0,4):
@@ -26,9 +26,8 @@ class Cle:
                 return True
             elif self.listeCle[i] > cle2.listeCle[i]:
                 return False
-    """
-    fonction qui determine si la clef qui appelle cette methode est strictement plus grande que cle2 passer en parametre
-    """ 
+    
+    #fonction qui determine si la clef qui appelle cette methode est strictement plus grande que cle2 passer en parametre 
     def sup(self, cle2):
         
         for i in range(0,4):
@@ -37,9 +36,8 @@ class Cle:
             elif self.listeCle[i] < cle2.listeCle[i]:
                 return False
         
-    """
-    fonction qui determine si la clef qui appelle cette methode est egale a cle2 passer en parametre
-    """ 
+    
+    #fonction qui determine si la clef qui appelle cette methode est egale a cle2 passer en parametre
     def eg(self, cle2):
 
         for i in range(0,4):
