@@ -1,6 +1,4 @@
-mesure faite sur le fichier qui contient le hash de tout les mots du fichier Shakespeare
-
-12.636184692382812 microseconde pour tout construire avec ConsIter
-0.0 miliseconde pour tout construire avec Ajout
-0.0 miliseconde pour tout supprimer avec SuppMin
-22.54939079284668 miliseconde pour tout construire avec Union
+31.252622604370117 milliseconde pour construire le Tas Min tableau avec ConsIter
+0.0 milliseconde pour construire le Tas Min tableau avec Ajout
+0.0 milliseconde pour tout supprimer avec SuppMin
+46.88096046447754 milliseconde pour construire le Tas Min tableau avec Union

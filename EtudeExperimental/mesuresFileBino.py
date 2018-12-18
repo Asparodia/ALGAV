@@ -97,9 +97,9 @@ Res.append(mesureUnion(fileName))
 print(Res)
 f = open("mesuresFileBino.txt","w")
     
-f.write(str(Res[0]) + " miliseconde pour tout construire avec ConsIter\n" )
-f.write(str(Res[1]) + " miliseconde pour tout construire avec AjoutTournois\n" )
-f.write(str(Res[2]) + " miliseconde pour tout supprimer avec SuppMin\n" )    
-f.write(str(Res[3]) + " miliseconde pour tout construire avec Union\n" )
+f.write(str(Res[0]) + " milliseconde pour construire la File Binomiale avec ConsIter\n" )
+f.write(str(Res[1]) + " milliseconde pour construire la File Binomiale avec AjoutTournois\n" )
+f.write(str(Res[2]) + " milliseconde pour tout supprimer avec SuppMin\n" )    
+f.write(str(Res[3]) + " milliseconde pour construire la File Binomiale avec des unions successives Union\n" )
 
 f.close()

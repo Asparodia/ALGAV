@@ -120,5 +120,5 @@ def md5(msg):
 def hexAffiche(digest):
     return '{:032x}'.format(int.from_bytes(digest, byteorder='big'))
 
-print(md5("Merci mon gars Durassel"))
-print(md5("of"))
+print(md5(""))
+print(md5("The quick brown fox jumps over the lazy dog"))

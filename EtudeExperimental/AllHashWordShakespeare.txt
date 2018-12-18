@@ -1,3 +1,8 @@
+905534 mots au total dans Shakespeare
+20152 mots different
+2.953442335128784 seconde pour hasher les mots et construire l'AVL
+0 collisions dans l'AVL qui contient le hasher des mots differents
+
 8cc28099f61dedc7e5a2f415ad6414f2
 3ecee86dac05192d597144470c0e30c4
 d41d8cd98f00b204e9800998ecf8427e

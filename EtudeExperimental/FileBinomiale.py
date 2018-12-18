@@ -49,14 +49,13 @@ class FileBinomial:
         """ renvoie le tournois de degre minimum"""
         if(self.estVide()):
             return None
-        self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
         return self.tournois[0]
     
     def reste(self):
         """renvoie la file privé de son tournois de degree minimum"""
         if(self.estVide()):
             return None
-        self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
+        
         self.tournois.pop(0)
         return self
     
@@ -64,9 +63,16 @@ class FileBinomial:
         """ renvoie le tournois avec la racine la plus petite et le supprime de la file"""
         if self.tournois == []:
             return None
-        
         tournoisP = self.tournois[0]
-        self.tournois.pop(0)
+        minimum = tournoisP.racine
+        ind = 0
+        for i in range(1,len(self.tournois)):
+            if(self.tournois[i].racine.inf(minimum)):
+                minimum = self.tournois[i].racine
+                tournoisP = self.tournois[i]
+                ind = i
+        
+        self.tournois.pop(ind)
         h = FileBinomial()
         for t in tournoisP.enfants:
             h.AjoutTournois(t)
@@ -86,6 +92,7 @@ class FileBinomial:
             f.AjoutTournois(t)
             res = UnionFile(self,f)
             self.tournois = res.tournois
+            self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
             
             
     def ConsIter(self,tournois):
@@ -211,8 +218,11 @@ def main():
     l.extend([t1,t2,t3,t4,t5,t6])
     F2 = FileBinomial()
     F2.ConsIter(l)
+    print(F)
+    print(F2)
     F3 = UnionFile(F,F2)
     print(F3)
+    F3.SuppMin()
 
-#if __name__ == "__main__":
-#    main()
+if __name__ == "__main__":
+    main()

@@ -34,7 +34,7 @@ class AVL(object):
         if iterable:
             for item in iterable:
                 self.ajout(item)
-
+        self.collision = 0
     def __repr__(self):
         return str(self.arbreBinareToTab())
     
@@ -83,6 +83,7 @@ class AVL(object):
         while courant is not None:
             if courant.data.eg(data):
                 print(" cette valeur est deja dans l'arbre""")
+                self.collision = self.collision + 1 
                 return None
             elif courant.data.sup(data):
                 #si data > valeur actuelle on l'ajoute a gauche du node qui contient la valeur actuelle
@@ -197,7 +198,8 @@ class AVL(object):
         new_parent.update_hauteur()
 
     
-
+    def NbColli(self):
+        return self.collision
 
 
 if __name__ == "__main__":
