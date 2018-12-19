@@ -25,7 +25,7 @@ class TournoisBino:
     def file(self):
         """ transforme un tournois en file binomial qui a pour unique tournois ce tournois"""
         res = FileBinomial()
-        res.AjoutTournois(self)
+        res.tournois.append(self)
         return res
     
     def __repr__(self):
@@ -49,24 +49,29 @@ class FileBinomial:
         """ renvoie le tournois de degre minimum"""
         if(self.estVide()):
             return None
-        self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
-        return self.tournois[0]
+        return self.tournois[-1]
     
     def reste(self):
         """renvoie la file privé de son tournois de degree minimum"""
         if(self.estVide()):
             return None
-        self.tournois = sorted(self.tournois,key = lambda tournoi : tournoi.degre)
-        self.tournois.pop(0)
+        self.tournois.pop()
         return self
     
     def SuppMin(self):
         """ renvoie le tournois avec la racine la plus petite et le supprime de la file"""
         if self.tournois == []:
             return None
-        
         tournoisP = self.tournois[0]
-        self.tournois.pop(0)
+        minimum = tournoisP.racine
+        ind = 0
+        for i in range(1,len(self.tournois)):
+            if(self.tournois[i].racine.inf(minimum)):
+                minimum = self.tournois[i].racine
+                tournoisP = self.tournois[i]
+                ind = i
+        
+        self.tournois.pop(ind)
         h = FileBinomial()
         for t in tournoisP.enfants:
             h.AjoutTournois(t)
@@ -83,7 +88,7 @@ class FileBinomial:
             self.tournois.append(t)
         else:
             f = FileBinomial()
-            f.AjoutTournois(t)
+            f.tournois.append(t)
             res = UnionFile(self,f)
             self.tournois = res.tournois
             
@@ -126,7 +131,7 @@ def ajoutMin(F,tournoi):
     """ ajoute un tournois de degre plus petit que le tournois de degre plus petit d'une file dans une file"""
     if(F.minDegre().degre<tournoi.degre):
         return None
-    F.tournois.insert(0,tournoi)
+    F.tournois.append(tournoi)
     return F
         
 def Union(F1,F2,t):

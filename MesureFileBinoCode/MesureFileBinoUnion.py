@@ -5,7 +5,6 @@ import os
 import csv
  
 def mesureTemps(a,b):
-    c = FileBinomiale.FileBinomial()
     start = time.time()
     c = FileBinomiale.UnionFile(a,b)
     end = time.time()
