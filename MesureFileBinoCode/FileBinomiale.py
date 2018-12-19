@@ -1,5 +1,3 @@
-import cle
-
 class TournoisBino:
     """ Classe representant un tournois binomial, elle vas etre utiliser pour representer notre file binomiale comme une liste de tournois binomiaux"""
     def __init__(self,root):

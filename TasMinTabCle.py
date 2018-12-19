@@ -119,7 +119,6 @@ class TasMinTab():
         Le parametre vas etre une copie du tas a unir dans le tas actuel juste pour eviter de modifier cette liste avec notre algorithme
         """
         
-        
         if(self.estVide() and tas2.estVide()):
             print("les deux tas son vide Union est vide")
             return
