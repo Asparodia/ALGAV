@@ -109,7 +109,7 @@ class TasMinTab():
         """
         self.tas.extend(vals)
         self.tailleTas = len(vals)
-        for i in range(len(self.tas)-1,0,-1):
+        for i in range((len(self.tas)-1)//2,0,-1):
             self.remonte(i)
         
     
@@ -118,31 +118,12 @@ class TasMinTab():
         Rend l'union du tas actuel avec le second tas passer en parametres (le tas qui appelle cette fonction vas etre modifier si on l'uni avec un tas non vide)
         Le parametre vas etre une copie du tas a unir dans le tas actuel juste pour eviter de modifier cette liste avec notre algorithme
         """
+        L = self.tas[1:]
+        L.extend(tas2.tas[1:])
+        self.tas = [cle.Cle("0x00000000000000000000000000000000")]
+	self.tailleTas = 0
+        self.ConsIter(L)
         
-        if(self.estVide() and tas2.estVide()):
-            print("les deux tas son vide Union est vide")
-            return
-        elif(self.estVide()):
-            self.tas = tas2.tas
-            self.tailleTas = tas2.tailleTas
-            return
-        elif(tas2.estVide()):
-            return
-        else:
-            tas1Min = self.getMin()
-            tas2Min = tas2.getMin()
-            
-            if(tas1Min.inf(tas2Min)):
-                for i in range(1,tas2.getTaille()+1):
-                    add = tas2.tas[i]
-                    self.Ajout(add)
-            else:
-                for i in range(1 ,self.getTaille()+1):
-                    add = self.tas[i]
-                    tas2.Ajout(add)
-                self.tas = tas2.tas
-                self.tailleTas = tas2.tailleTas
-            return
         
     def __repr__(self):
         return "Tas Binaire Tab : " + str(self.tas[1:])
