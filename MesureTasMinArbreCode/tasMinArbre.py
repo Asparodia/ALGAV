@@ -99,39 +99,3 @@ def consIter(liste) :
             racine.Ajout(liste[i])
         return racine
     return None
-
-def main():
-    a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
-    b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
-    c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
-    d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
-    e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
-    f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
-    root = TasMinArbre(a)
-    root.Ajout(b)
-    root.Ajout(c)
-    root.Ajout(d)
-    root.Ajout(e)
-    root.Ajout(f)
-    print(root.nbNoeud)
-    a=cle.Cle("0x9a5cdb45f1951a3a82b09af737fdc9aa")
-    b=cle.Cle("0x53f7ffe901f3686b875af337039ee262")
-    c=cle.Cle("0xa89aa39aa55e5bb5fb33a1802b248207")
-    d=cle.Cle("0x8aefe5f306ac962bcbdb63aeb58d1e35")
-    e=cle.Cle("0x85c3d80bfe89b91033b23cd659cddb08")
-    f=cle.Cle("0x45484c820aee4c04ef89c1db9bb3eaf5")
-    root2 = TasMinArbre(a)
-    root2.Ajout(b)
-    root2.Ajout(c)
-    root2.Ajout(d)
-    root2.Ajout(e)
-    root2.Ajout(f)
-    
-    
-    arbre = union(root,root2)
-    print(arbre.nbNoeud)
-    
-    
-
-if __name__ == "__main__":
-    main()

@@ -204,15 +204,31 @@ class AVL(object):
 
 if __name__ == "__main__":
     
+    print("AVL sur un arbre simple : ")
+    
     a=cle.Cle("0x00000000000000000000000000000001")
     b=cle.Cle("0x00000000000000000000000000000002")
     c=cle.Cle("0x00000000000000000000000000000003")
     d=cle.Cle("0x00000000000000000000000000000004")
     e=cle.Cle("0x00000000000000000000000000000005")
-    f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
-    l = list()
-    l.extend([a,b,c])
-    data = [a,b,c,d,e,f]
+    f=cle.Cle("0x00000000000000000000000000000006")
+    data = [a,b,c,d,e]
+    print("les cles qui vont etre mis dans notre avl : "+str(data))
     avl_tree = AVL(data)
+    print("\n")
+    print("la representation sous forme de tableau de notre AVL : ")
     print(avl_tree)
-    
+    print("\n")
+    print("recherche de 00000000000000000000000000003 dans notre AVL : " + str(avl_tree.recherche(c)))
+    print("recherche de 00000000000000000000000000006 qui n'est pas dans notre AVL : ")
+    avl_tree.recherche(f)
+    print("===================================================")
+    print("\n")
+    print("un avl avec 50 000 cles :")
+    print("Test sur le jeu5 taille 50 000\n")
+    fichier = open("cles_alea/jeu_5_nb_cles_50000.txt",'r')
+    param = list()
+    for line in fichier:
+        param.append(cle.Cle(line))
+    tree = AVL(param)
+    print(tree)

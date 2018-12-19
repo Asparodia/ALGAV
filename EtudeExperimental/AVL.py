@@ -201,18 +201,4 @@ class AVL(object):
     def NbColli(self):
         return self.collision
 
-
-if __name__ == "__main__":
-    
-    a=cle.Cle("0x00000000000000000000000000000001")
-    b=cle.Cle("0x00000000000000000000000000000002")
-    c=cle.Cle("0x00000000000000000000000000000003")
-    d=cle.Cle("0x00000000000000000000000000000004")
-    e=cle.Cle("0x00000000000000000000000000000005")
-    f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
-    l = list()
-    l.extend([a,b,c])
-    data = [a,b,c,d,e,f]
-    avl_tree = AVL(data)
-    print(avl_tree)
     
