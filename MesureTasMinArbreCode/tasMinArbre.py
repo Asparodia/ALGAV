@@ -16,7 +16,24 @@ class TasMinArbre:
         else :
             self.data = data
             self.nbNoeud = 1
-
+            
+    def __repr__(self):
+        return str(self.arbreBinareToTab())
+    
+    def arbreBinareToTab(self):
+        #renvoie la representation sous forme de tableau de notre arbre
+        queue = list()
+        items = list()
+        if self.nbNoeud >0:
+            queue.append(self)
+        while len(queue) > 0:
+            node = queue.pop(0)
+            items.append(node.data)
+            if node.left is not None:
+                queue.append(node.left)
+            if node.right is not None:
+                queue.append(node.right)
+        return items
 
     def Ajout(self, data):
         #Ajoute l'élement data dans un arbre
@@ -45,7 +62,9 @@ class TasMinArbre:
             self.data = TasMinArbre(data)
             return True
 
-
+    def getMin(self):
+        return self.data
+    
     def prefixePrint(self):
         if self.left:
             self.left.prefixePrint()

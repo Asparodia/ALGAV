@@ -176,7 +176,9 @@ def Union(F1,F2,t):
         if(t.degre < t1.degre and t.degre==t2.degre):
             return Union(F2.reste(),F1,union2Tid(t,t2))
     
-def main():        
+def main(): 
+
+    print("test ConsIter : \n")       
     l = list()
     a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
     b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
@@ -191,17 +193,27 @@ def main():
     t5 = TournoisBino(e)
     t6 = TournoisBino(f)
     l.extend([t1,t2,t3,t4,t5,t6])
+    print("les cles (dans des tounois binomiaux de degree 0) qui vont etre dans la file Binomiale : \n"+str(l))
+    print("\n")
+    print("File construite : ")
     F = FileBinomial()
     F.ConsIter(l)
     print(F)
+    print("cette file a pour tournois : ")
     for c in F.tournois:
         print(c)
-        
-    print(F.SuppMin())
+    print("======================================")
+    print("\n")
+    print("test SuppMin sur cette file :")
+    print("la racine la plus petite est : "+str(F.SuppMin()))
+    print("la file apres la suppression de la racine la plus petite est :")
     print(F)
+    print("cette nouvelle file a pour tournois : ")
     for c in F.tournois:
         print(c)
-        
+    print("======================================")
+    print("\n")
+    print("test Union de deux files: ")
     a=cle.Cle("0x9a5cdb45f1951a3a82b09af737fdc9aa")
     b=cle.Cle("0x53f7ffe901f3686b875af337039ee262")
     c=cle.Cle("0xa89aa39aa55e5bb5fb33a1802b248207")
@@ -218,11 +230,60 @@ def main():
     l.extend([t1,t2,t3,t4,t5,t6])
     F2 = FileBinomial()
     F2.ConsIter(l)
+    print("premiere file : ")
     print(F)
+    print("cette file a pour tournois : ")
+    for c in F.tournois:
+        print(c)
+    print("deuxieme file : ")
     print(F2)
+    print("cette file a pour tournois : ")
+    for c in F2.tournois:
+        print(c)
+    print("file union des deux :")
     F3 = UnionFile(F,F2)
     print(F3)
-    F3.SuppMin()
-
+    print("cette file a pour tournois : ")
+    for c in F3.tournois:
+        print(c)
+    
+    print("======================================")
+    print("\n")
+    
+    print("Test sur les jeu1 et jeu5 de taille 50 000\n")
+    fichier = open("cles_alea/jeu_5_nb_cles_50000.txt",'r')
+    param = list()
+    for line in fichier:
+        param.append(TournoisBino(cle.Cle(line)))
+    fichier.close()
+    print("ConsIter sur une liste de 50 000 cle")
+    fileBino = FileBinomial()
+    fileBino.ConsIter(param)
+    print(fileBino)
+    print("cette file a pour tournois : ")
+    for c in fileBino.tournois:
+        print(c)
+        
+    print("Union de deux tas construit avec 50 000 clé chacun")
+    f2 = open("cles_alea/jeu_1_nb_cles_50000.txt",'r')
+    param2 = list()
+    for line in f2:
+        param2.append(TournoisBino(cle.Cle(line)))
+    f2.close()
+    fileBino2 = FileBinomial()
+    fileBino2.ConsIter(param)
+    print("premiere file : ")
+    print(fileBino)
+    print("deuxieme file : ")
+    print(fileBino2)
+    print("file union des deux :")
+    F3 = UnionFile(fileBino,fileBino2)
+    print(F3)
+    print("cette file a pour tournois : ")
+    for c in F3.tournois:
+        print(c)
+    
+    print("======================================")
+    
 if __name__ == "__main__":
     main()
