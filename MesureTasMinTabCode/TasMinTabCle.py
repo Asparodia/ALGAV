@@ -109,8 +109,8 @@ class TasMinTab():
         """
         self.tas.extend(vals)
         self.tailleTas = len(vals)
-        for i in range((len(self.tas)-1)//2,0,-1):
-            self.remonte(i)
+        for i in range((len(self.tas)//2),0,-1):
+            self.descend(i)
         
     
     def Union(self,tas2):
@@ -118,94 +118,14 @@ class TasMinTab():
         Rend l'union du tas actuel avec le second tas passer en parametres (le tas qui appelle cette fonction vas etre modifier si on l'uni avec un tas non vide)
         Le parametre vas etre une copie du tas a unir dans le tas actuel juste pour eviter de modifier cette liste avec notre algorithme
         """
+        
         L = self.tas[1:]
         L.extend(tas2.tas[1:])
-        print(L)
         self.tas = [cle.Cle("0x00000000000000000000000000000000")]
-        self.tailleTas=0
-        
+        self.tailleTas = 0
         self.ConsIter(L)
+        
         
         
     def __repr__(self):
         return "Tas Binaire Tab : " + str(self.tas[1:])
-
-def main():
-    a=cle.Cle("0x9c1f03a0d9cf510f2765bd0f226ff5dc")
-    b=cle.Cle("0x10fd1015413104a2f26018d0ab77a727")
-    c=cle.Cle("0x2e73d8ce4bd45923286e966bc8cf2d95")
-    d=cle.Cle("0x767accd0c60c603f71a68be994019c7e")
-    e=cle.Cle("0x34c63c08abab99722b945e57081288e7")
-    f=cle.Cle("0x6d481adc2aeed025f0374a5982b5c23c")
-    
-    print("     Test Ajout : tabTest  ")  
-    tabTest = TasMinTab()
-    tabTest.Ajout(f)
-    tabTest.Ajout(b)
-    tabTest.Ajout(c)
-    tabTest.Ajout(d)
-    tabTest.Ajout(a)
-    tabTest.Ajout(e)
-    print(tabTest)
-    print("========================================")
-    print("     Test SuppMin sur tabTest :   ") 
-    minimum = (tabTest.SupMin())
-    print(minimum)
-    print("     tabTest apres suppression : " )
-    print(tabTest)
-    print("========================================")
-    print("     Test ConsIter : tabTestConstIter :   ") 
-    L = [a,b,c,d,e,f]
-    tabTestConstIter = TasMinTab()
-    tabTestConstIter.ConsIter(L)
-    print(tabTestConstIter)
-    print("========================================")
-    print("     Test Union :    ") 
-    L1 = [a,b,c]
-    L2 = [d,e,f]
-    tas1 = TasMinTab()
-    tas1.ConsIter(L1)
-    tas2 = TasMinTab()
-    tas2.ConsIter(L2)
-    print(" Tas1 : ")
-    print(tas1)
-    print(" Tas2 : ")
-    print(tas2)
-    print(" TAS UNION de Tas1 et Tas1 :")
-    tas1.Union(tas2)
-    print(tas1)
-    print("\n========================================")
-    print("Test sur les jeu1 et jeu2 de taille 50 000\n")
-    fichier = open("cles_alea/jeu_5_nb_cles_50000.txt",'r')
-    param = list()
-    
-    for line in fichier:
-        param.append(cle.Cle(line))
-    fichier.close()
-    print("ConsIter sur une liste de 50 000 cle")
-    tasC = TasMinTab()
-    print("taille avant la construction : "+str(tasC.getTaille()))
-    tasC.ConsIter(param)
-    print("taille apres la construction : "+str(tasC.getTaille()))
-    print("le minimum est : "+str(tasC.getMin()))
-    
-    print("Union de deux tas construit avec 50 000 cle chacun")
-    f2 = open("cles_alea/jeu_1_nb_cles_50000.txt",'r')
-    param2 = list()
-    for line in f2:
-        param2.append(cle.Cle(line))
-    f2.close()
-    tasU = TasMinTab()
-    tasU.ConsIter(param2)
-    print("tas 1 minimum : "+str(tasC.getMin()) )
-    print("tas 1 taille : "+str(tasC.getTaille()) )
-    print("tas 2 minimum : "+str(tasU.getMin()) )
-    print("tas 2 taille : "+str(tasU.getTaille()) )
-    print("on a : \n\t"+ str(tasC.getMin()) +" qui est inferieur a "+ str(tasU.getMin()))
-    tasC.getMin().inf(tasU.getMin())
-    tasU.Union(tasC)
-    print("tas fusion de tas1 et tas 2 a une taille : "+str(tasU.getTaille()) )
-    print("le minimum du tas fusion est : "+str(tasU.getMin()))
-
-if __name__ == "__main__":
-    main()

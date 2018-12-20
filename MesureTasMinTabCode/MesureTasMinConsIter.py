@@ -20,7 +20,6 @@ def mesureConsIter(allFiles):
         time = 0
         param = list()
         f = open("cles_alea/"+x,'r')
-        print(x)
         for line in f:
             param.append(cle.Cle(line))
             

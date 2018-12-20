@@ -1,44 +1,65 @@
-#pip install -U memory_profiler
- 
 import TasMinTabCle
 import time
 import cle
 import os
 import csv
- 
+
 def mesureTemps(a,b):
     start = time.time()
     a.Union(b)
     end = time.time()
-    return (a,(end-start))
- 
+    return (end-start)
+
 def mesureUnion(allFiles):
     allFiles.sort()
-    res = list()
-    j = 0
+    allTas = list()
     for x in allFiles:
-         
-        time = 0
         param = list()
         f = open("cles_alea/"+x,'r')
         for line in f:
-            param.append(cle.Cle(line))
-            
-        a = TasMinTabCle.TasMinTab()
-        a.Ajout(param[0])
+            k = cle.Cle(line)
+            param.append(k)
         
-        for i in range(1,len(param)):
-            b = TasMinTabCle.TasMinTab()
-            b.Ajout(param[i])  #Initialisation (temps negligeable)
-            (tasRes,tps) = mesureTemps(a,b)
-            time = time + (tps*(10**3))
-            a = tasRes
-            
-        j = j + 1
-        res.append((j,x,time))
-        param = list()
+        a = TasMinTabCle.TasMinTab()
+        a.ConsIter(param)
+        allTas.append([x,a])
+        
+    tasJeu1 = allTas[0:8]
+    tasJeu2 = allTas[8:16]
+    tasJeu3 = allTas[16:24]
+    tasJeu4 = allTas[24:32]
+    tasJeu5 = allTas[32:40]
+    
+    
+    res = list()
+    j = 1
+    tps = 0
+    for i in range(0,len(tasJeu1)):
+        name = tasJeu1[i][0]
+        jeuName = name[:5]
+        numName = name[13:]
+        t = mesureTemps(tasJeu1[i][1],tasJeu2[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+numName)+ " et "+ str(tasJeu2[i][0][:5]+tasJeu2[i][0][13:]),tps) )
+        tps = 0
+        
+        j = j+ 1
+        t = mesureTemps(tasJeu1[i][1],tasJeu3[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+"_2"+numName+'\'')+ " et "+ str(tasJeu3[i][0][:5]+tasJeu3[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
+        t = mesureTemps(tasJeu1[i][1],tasJeu4[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+"_2_3"+numName+'\'\'')+ " et "+ str(tasJeu4[i][0][:5]+tasJeu4[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
+        t = mesureTemps(tasJeu1[i][1],tasJeu5[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+"_2_3_4"+numName+'\'\'\'')+ " et "+ str(tasJeu5[i][0][:5]+tasJeu5[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
     return res
-       
 
 allFiles = os.listdir("cles_alea")  
        

@@ -16,7 +16,6 @@ def mesureConsIter(allFiles):
     res = list()
     j = 0 
     for x in allFiles:
-        #print(x)
         time = 0
         param = list()
         f = open("cles_alea/"+x,'r')

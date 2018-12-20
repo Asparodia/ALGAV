@@ -6,36 +6,62 @@ import cle
 import os
 import csv
 
-def mesureTemps(fun,a,b):
+def mesureTemps(a,b):
     
     start = time.time()
-    c = fun(a,b)
+    c = tasMinArbre.union(a,b)
     end = time.time()
     
     return (c,(end-start))
  
 def mesureUnion(allFiles):
     allFiles.sort()
-    res = list()
-    j = 0
+    allFile = list()
     for x in allFiles:
-        time = 0
         param = list()
         f = open("cles_alea/"+x,'r')
         for line in f:
-            param.append(cle.Cle(line))
-            
-        a = tasMinArbre.TasMinArbre(param[0])
+            k = cle.Cle(line)
+            param.append(k)
         
-        for i in range(1,len(param)):
-            b = tasMinArbre.TasMinArbre(param[i])
-            (tasRes,tps) = mesureTemps(tasMinArbre.union,a,b)
-            time = time + (tps*(10**3))
-            a = tasRes
-            
-        j = j + 1
-        res.append((j,x,time))
-        param = list()
+        a = tasMinArbre.consIter(param)
+        allFile.append([x,a])
+    tasJeu1 = allFile[0:8]
+    tasJeu2 = allFile[8:16]
+    tasJeu3 = allFile[16:24]
+    tasJeu4 = allFile[24:32]
+    tasJeu5 = allFile[32:40]
+    
+    
+    res = list()
+    j = 1
+    tps = 0
+    for i in range(0,len(tasJeu1)):
+        name = tasJeu1[i][0]
+        jeuName = name[:5]
+        numName = name[13:]
+        (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu2[i][1])
+        tps = tps + t*(10**3)
+        
+        res.append( (j,"union "+str(jeuName+numName)+ " et "+ str(tasJeu2[i][0][:5]+tasJeu2[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
+        (tasRes2,t) = mesureTemps(tasRes,tasJeu3[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+numName+'_2')+ " et "+ str(tasJeu3[i][0][:5]+tasJeu3[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
+        (tasRes3,t) = mesureTemps(tasRes2,tasJeu4[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+numName+'_2_3')+ " et "+ str(tasJeu4[i][0][:5]+tasJeu4[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
+        (tasRes4,t) = mesureTemps(tasRes3,tasJeu5[i][1])
+        tps = tps + t*(10**3)
+        res.append( (j,"union "+str(jeuName+numName+'_2_3_4')+ " et "+ str(tasJeu5[i][0][:5]+tasJeu5[i][0][13:]),tps) )
+        tps = 0
+        j = j+ 1
+        tasRes = None
     return res
 
 
