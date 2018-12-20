@@ -95,6 +95,12 @@ class TasMinArbre:
 
 def union(arbre1, arbre2) :
     #Fais l'union de deux arbres
+    L = arbre1.arbreBinareToTab()
+    L.extend(arbre2.arbreBinareToTab())
+    res = consIter(L)
+    return res
+
+def union2(arbre1,arbre2):
     if arbre1 is None :
         return arbre2
     if arbre2 is None :
@@ -106,8 +112,6 @@ def union(arbre1, arbre2) :
         else :
             arbre2.ajoutArbre(arbre1)
             return arbre2
-
-
 
 
 def consIter(liste) :
