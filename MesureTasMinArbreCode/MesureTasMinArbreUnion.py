@@ -7,12 +7,8 @@ import os
 import csv
 
 def mesureTemps(a,b):
-    
-    start = time.time()
     c = tasMinArbre.union(a,b)
-    end = time.time()
-    
-    return (c,(end-start))
+    return c
  
 def mesureUnion(allFiles):
     allFiles.sort()
@@ -32,36 +28,20 @@ def mesureUnion(allFiles):
     tasJeu4 = allFile[24:32]
     tasJeu5 = allFile[32:40]
     
-    
     res = list()
-    j = 1
-    tps = 0
+    
     for i in range(0,len(tasJeu1)):
         name = tasJeu1[i][0]
-        jeuName = name[:5]
-        numName = name[13:]
-        (tasRes,t) = mesureTemps(tasJeu1[i][1],tasJeu2[i][1])
-        tps = tps + t*(10**3)
+        numName = name[14:]
+        d = time.time()
+        tasRes = mesureTemps(tasJeu1[i][1],tasJeu2[i][1])
+        tasRes2 = mesureTemps(tasRes,tasJeu3[i][1])
+        tasRes3 = mesureTemps(tasRes2,tasJeu4[i][1])
+        mesureTemps(tasRes3,tasJeu5[i][1])
+        e = time.time()
+        tps = (e-d)*(10**3)
+        res.append(("5 * "+numName,tps))
         
-        res.append( (j,"union "+str(jeuName+numName)+ " et "+ str(tasJeu2[i][0][:5]+tasJeu2[i][0][13:]),tps) )
-        tps = 0
-        j = j+ 1
-        (tasRes2,t) = mesureTemps(tasRes,tasJeu3[i][1])
-        tps = tps + t*(10**3)
-        res.append( (j,"union "+str(jeuName+numName+'_2')+ " et "+ str(tasJeu3[i][0][:5]+tasJeu3[i][0][13:]),tps) )
-        tps = 0
-        j = j+ 1
-        (tasRes3,t) = mesureTemps(tasRes2,tasJeu4[i][1])
-        tps = tps + t*(10**3)
-        res.append( (j,"union "+str(jeuName+numName+'_2_3')+ " et "+ str(tasJeu4[i][0][:5]+tasJeu4[i][0][13:]),tps) )
-        tps = 0
-        j = j+ 1
-        (tasRes4,t) = mesureTemps(tasRes3,tasJeu5[i][1])
-        tps = tps + t*(10**3)
-        res.append( (j,"union "+str(jeuName+numName+'_2_3_4')+ " et "+ str(tasJeu5[i][0][:5]+tasJeu5[i][0][13:]),tps) )
-        tps = 0
-        j = j+ 1
-        tasRes = None
     return res
 
 
@@ -70,7 +50,7 @@ allFiles = os.listdir("cles_alea")
 Res = mesureUnion(allFiles)
 total = 0
 for f in Res:
-    total = total + f[2]
+    total = total + f[1]
 Res.append((-1,"total du temps en miliseconde pour tout les fichiers : ",total))
 
 csvfileTime = "timeTasMinArbreUnion.csv"

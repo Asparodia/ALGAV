@@ -70,7 +70,6 @@ def mesureTemps2(a,b):
     return (c,(end-start))
  
 def mesureUnion(name):   
-    time = 0
     param = list()
     tourn = list()
     f = open(name,'r')
@@ -78,16 +77,22 @@ def mesureUnion(name):
         param.append(cle.Cle(line))
     for c in param:
         tourn.append(FileBinomiale.TournoisBino(c))
+    
     file = FileBinomiale.FileBinomial()
     file.AjoutTournois(tourn[0])
-    for i in range(1,len(tourn)):
-        b = FileBinomiale.FileBinomial()
-        b.AjoutTournois(tourn[i])  #Initialisation (temps negligeable)
-        (tasRes,tps) = mesureTemps2(file,b)
-        time = time + (tps*(10**3))
-        file = tasRes
-    return (time)
-
+    for i in range(1,len(tourn)//2):
+        file.AjoutTournois(tourn[i])
+    file2 = FileBinomiale.FileBinomial()
+    file2.AjoutTournois(tourn[len(tourn)//2])
+    for j in range((len(tourn)//2)+1,len(tourn)):
+        file2.AjoutTournois(tourn[j])
+        
+    start = time.time()
+    FileBinomiale.UnionFile(file,file2)
+    end = time.time()
+    
+    
+    return (end-start)*10**3
 fileName = "resultHashShakesPeare.txt"
 Res =list()
 Res.append(mesureConsIter(fileName))

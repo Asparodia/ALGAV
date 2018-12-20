@@ -1,4 +1,4 @@
-156.2948226928711 milliseconde pour construire la File Binomiale avec ConsIter
+156.28933906555176 milliseconde pour construire la File Binomiale avec ConsIter
 0.0 milliseconde pour construire la File Binomiale avec AjoutTournois
 0.0 milliseconde pour tout supprimer avec SuppMin
-140.60258865356445 milliseconde pour construire la File Binomiale avec des unions successives Union
+0.0 milliseconde pour construire la File Binomiale avec des unions successives Union

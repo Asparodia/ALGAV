@@ -1,33 +1,9 @@
-1,union jeu_1_100.txt et jeu_2_100.txt,0.0
-2,union jeu_1_100.txt_2 et jeu_3_100.txt,0.0
-3,union jeu_1_100.txt_2_3 et jeu_4_100.txt,0.0
-4,union jeu_1_100.txt_2_3_4 et jeu_5_100.txt,0.0
-5,union jeu_1_1000.txt et jeu_2_1000.txt,15.626907348632812
-6,union jeu_1_1000.txt_2 et jeu_3_1000.txt,15.626907348632812
-7,union jeu_1_1000.txt_2_3 et jeu_4_1000.txt,31.25286102294922
-8,union jeu_1_1000.txt_2_3_4 et jeu_5_1000.txt,359.4703674316406
-9,union jeu_1_10000.txt et jeu_2_10000.txt,187.4980926513672
-10,union jeu_1_10000.txt_2 et jeu_3_10000.txt,328.1831741333008
-11,union jeu_1_10000.txt_2_3 et jeu_4_10000.txt,453.1731605529785
-12,union jeu_1_10000.txt_2_3_4 et jeu_5_10000.txt,609.3831062316895
-13,union jeu_1_200.txt et jeu_2_200.txt,0.0
-14,union jeu_1_200.txt_2 et jeu_3_200.txt,0.0
-15,union jeu_1_200.txt_2_3 et jeu_4_200.txt,15.628814697265625
-16,union jeu_1_200.txt_2_3_4 et jeu_5_200.txt,15.626668930053711
-17,union jeu_1_20000.txt et jeu_2_20000.txt,765.7041549682617
-18,union jeu_1_20000.txt_2 et jeu_3_20000.txt,747.0877170562744
-19,union jeu_1_20000.txt_2_3 et jeu_4_20000.txt,1109.5259189605713
-20,union jeu_1_20000.txt_2_3_4 et jeu_5_20000.txt,1812.66188621521
-21,union jeu_1_500.txt et jeu_2_500.txt,0.0
-22,union jeu_1_500.txt_2 et jeu_3_500.txt,15.624761581420898
-23,union jeu_1_500.txt_2_3 et jeu_4_500.txt,15.624523162841797
-24,union jeu_1_500.txt_2_3_4 et jeu_5_500.txt,15.625715255737305
-25,union jeu_1_5000.txt et jeu_2_5000.txt,93.75739097595215
-26,union jeu_1_5000.txt_2 et jeu_3_5000.txt,125.01335144042969
-27,union jeu_1_5000.txt_2_3 et jeu_4_5000.txt,203.14764976501465
-28,union jeu_1_5000.txt_2_3_4 et jeu_5_5000.txt,250.02694129943848
-29,union jeu_1_50000.txt et jeu_2_50000.txt,1765.8143043518066
-30,union jeu_1_50000.txt_2 et jeu_3_50000.txt,2453.3872604370117
-31,union jeu_1_50000.txt_2_3 et jeu_4_50000.txt,4234.830141067505
-32,union jeu_1_50000.txt_2_3_4 et jeu_5_50000.txt,5938.140630722046
--1,total du temps en miliseconde pour tout les fichiers : ,21577.442407608032
+5 * 100.txt,15.625476837158203
+5 * 1000.txt,93.76001358032227
+5 * 10000.txt,1906.4576625823975
+5 * 200.txt,31.253576278686523
+5 * 20000.txt,4187.9472732543945
+5 * 500.txt,94.33317184448242
+5 * 5000.txt,671.9486713409424
+5 * 50000.txt,14564.067125320435
+-1,total du temps en miliseconde pour tout les fichiers : ,21565.39297103882

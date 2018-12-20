@@ -1,0 +1,5 @@
+31.284570693969727 milliseconde pour construire le Tas Min tableau avec ConsIter
+0.0 milliseconde pour construire le Tas Min tableau avec Ajout
+0.0 milliseconde pour tout supprimer avec SuppMin
+15.627384185791016 milliseconde pour construire le Tas Min tableau avec Union
+15.627384185791016 milliseconde pour construire le Tas Min tableau avec Union2
