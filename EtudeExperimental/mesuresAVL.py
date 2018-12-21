@@ -17,7 +17,7 @@ def shakeSpearHash(allFiles):
         for line in f:
             i = i + 1
             if(line not in ensemble ):
-                ensemble.add(line[:-2])
+                ensemble.add(line[:-1])
     for e in ensemble:
         motsHash.append(cle.Cle("0x"+str(md5.md5(e))))
     
